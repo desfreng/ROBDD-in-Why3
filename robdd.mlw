@@ -1,0 +1,606 @@
+module BDDType
+  use int.Int
+  
+  type bdd = 
+    | Bottom
+    | Top
+    | N int bdd bdd int (* N (var_id, true_branch, false_branch, node_id) *)
+
+  type affectation = int -> bool
+      
+   
+  (** Test whenever provided bdd has a node as root *)
+  let predicate is_node (input : bdd) : bool = 
+    match input with
+      | Bottom | Top -> false
+      | N _ _ _ _ -> true
+    end
+
+  (** Test whenever provided bdd is a leaf *)
+  let predicate is_leaf (input : bdd) : bool = not (is_node input)
+
+  (** Return the `true_branch` of provided bdd *)
+  let function true_branch (input : bdd) : bdd = 
+    requires { is_node input }
+    match input with
+      | N _ branch _ _ -> branch
+      | _ -> absurd
+    end
+
+  (** Return the `false_branch` of provided bdd *)
+  let function false_branch (input : bdd) : bdd = 
+    requires { is_node input }
+    match input with
+      | N _ _ branch _ -> branch
+      | _ -> absurd
+    end
+
+  (** Return the id of variable of provided bdd *)
+  let function var (input : bdd) : int = 
+    requires { is_node input }
+    match input with
+      | N var_id _ _ _ -> var_id
+      | _ -> absurd
+    end
+
+  (** Return the id of provided bdd *)
+  let function id (input : bdd) : int = 
+    match input with
+      | Bottom -> 0
+      | Top -> 1
+      | N _ _ _ node_id -> node_id
+    end
+
+  (* Equality of rank 0 *)
+  let predicate eq0 (t1 : bdd) (t2 : bdd) : bool = 
+    id t1 = id t2
+
+  (* Equality of rank 1 *)
+  let predicate eq1 (t1 : bdd) (t2 : bdd) : bool = 
+    match t1, t2 with
+      | Top, Top | Bottom, Bottom -> True
+      | N var_1 true_1 false_1 _, N var_2 true_2 false_2 _ ->
+          var_1 = var_2 && eq0 true_1 true_2 && eq0 false_1 false_2
+      | _ -> False
+    end
+  
+  (* Value of a BDD with a given affectation *)
+  let rec function value (f : affectation) (input : bdd) : bool = 
+    variant { input }
+    match input with
+      | Top -> True
+      | Bottom -> False
+      | N var_id true_b false_b _ -> if f var_id then value f true_b else value f false_b 
+    end
+  
+  let bool_to_leaves (b : bool) : bdd = if b then Top else Bottom
+    ensures { forall f : affectation. value f result = b }
+    ensures { is_leaf result }
+end
+
+
+module DefaultHashtbl
+  use map.Map
+  
+  type key
+  
+  val predicate eq key key : bool
+  
+  type t 'a = abstract { mutable contents: map key 'a ; mutable domain: map key bool }
+  invariant {
+    (      (* All similar key have the same status in the table's domain *)
+      forall u v : key. eq u v -> domain u = domain v
+    ) /\ ( (* If two key are similar and one is in the table, they map to the same value *)
+      forall u v : key. eq u v /\ domain u -> Map.([]) contents u =  Map.([]) contents v
+    )
+  }
+  by { contents = (fun _ -> any 'a) ; domain = (fun _ -> false) } 
+    
+  function is_in (h: t 'a) (k: key) : bool = 
+    h.domain k
+
+  function val_of (h : t 'a) (k : key) : 'a = Map.([]) h.contents k
+
+  val create (_n: int) : t 'a
+   ensures { forall k : key. is_in result k = false }
+
+  val put (h: t 'a) (k: key) (v: 'a) : unit
+    writes { h }
+    ensures { forall k' : key. eq k k' -> is_in h k' /\ val_of h k' = v }
+    ensures { forall k' : key. not eq k k' -> val_of h k' = val_of (old h) k' /\ is_in h k' = is_in (old h) k' }
+
+  exception NotFound
+
+  val find (h: t 'a) (k: key) : 'a
+    ensures { is_in h k /\ val_of h k = result }
+    raises  { NotFound -> not is_in h k }
+
+  val mem (h: t 'a) (k: key) : bool
+    ensures { result = is_in h k }
+end
+
+
+module CustomHashtbl
+  clone export DefaultHashtbl
+
+  val function hash key : int
+  
+  axiom hash_match_with_equal : 
+    forall k1 k2 : key. eq k1 k2 -> hash k1 = hash k2   
+end
+
+
+module BDD
+  use int.Int
+  use export BDDType
+  clone DefaultHashtbl as HCMap with type key = bdd, val eq = eq1
+
+  (* A value is mem_tbl in the table if it is in the table and it is linked to itself *)
+  predicate mem_tbl (tbl : HCMap.t bdd) (k : bdd) = 
+    HCMap.is_in tbl k /\ HCMap.val_of tbl k = k
+  
+  (* A value is well-formed (ie a ROBDD) if its mem_tbl in the hash-consign table or it's a leaf *)
+  predicate well_formed (tbl : HCMap.t bdd) (k : bdd) = 
+    is_leaf k \/ mem_tbl tbl k
+  
+  type hctable = { tbl : HCMap.t bdd; mutable next_id : int }
+  
+  (* Top and Bottom are not in the Table *)
+  invariant { not HCMap.is_in tbl Top /\ not HCMap.is_in tbl Bottom }
+  
+  (* Each BDD mem_tbl in table is Ordered [True Branch] *)
+  invariant { forall u : bdd. mem_tbl tbl u -> is_node (true_branch u) -> var u < var (true_branch u) }
+  
+  (* Each BDD mem_tbl in table is Ordered [False Branch] *)
+  invariant { forall u : bdd. mem_tbl tbl u -> is_node (false_branch u) -> var u < var (false_branch u) }
+  
+  (* No BDD mem_tbl in table has the same branch twice *)
+  invariant { forall u : bdd. mem_tbl tbl u -> true_branch u <> false_branch u }
+  
+  (* Each BDD in the domain is in the same equivalence-class of eq1 to its associated value *)
+  invariant { forall u : bdd. HCMap.is_in tbl u -> eq1 u (HCMap.val_of tbl u) }
+  
+  (* Each BDD mem_tbl in table has a unique id *)
+  invariant { forall u v : bdd. mem_tbl tbl u /\ mem_tbl tbl v /\ u <> v -> id u <> id v }
+  
+  (* Each BDD mem_tbl in table has a id lower than next_id *)
+  invariant { forall u : bdd. mem_tbl tbl u -> id u < next_id }
+  
+  (* Transitivity of true_branch for the BDD mem_tbl in table *)
+  invariant { forall u : bdd. mem_tbl tbl u -> well_formed tbl (true_branch u) }
+  
+  (* Transitivity of false_branch for the BDD mem_tbl in table *)
+  invariant { forall u : bdd. mem_tbl tbl u -> well_formed tbl (false_branch u) }
+ 
+  (* Next_id begin at 2 *)
+  invariant { next_id >= 2 }
+ 
+  (* Each BDD mem_tbl in table have an id greater than 2 *)
+  invariant { forall u : bdd. mem_tbl tbl u -> id u >= 2 }
+  
+  by { tbl = HCMap.create 16 ; next_id = 2 }
+  
+  (* Each BDD is now uniquily present in the table *)
+  lemma bdd_is_unique :
+    forall hc : hctable, u v : bdd. mem_tbl hc.tbl u /\ mem_tbl hc.tbl v -> 
+        var u = var v /\ true_branch u = true_branch v /\ false_branch u = false_branch v -> 
+          u = v
+
+  (* All BDD well-formed in the 'old_hc' Hash-consign table are still well-formed in the newer one *)
+  predicate still_well_formed (old_hc new_hc : hctable) = 
+    forall u : bdd. well_formed old_hc.tbl u -> well_formed new_hc.tbl u
+
+  (* With the hash-consign, for well-formed BDD, eq0 is the same as the logical equality *)
+  lemma eq0_match_logic :
+    forall hc : hctable, u v : bdd. well_formed hc.tbl u -> well_formed hc.tbl v -> u = v <-> eq0 u v
+  
+  (* Create an empty hctable *)
+  let create_hctable () : hctable = { tbl = HCMap.create 16 ; next_id = 2 }
+  
+  (* From two bdd and a variable, we create a new BDD in the table *)
+  let create_node (hc : hctable) (v : int) (t : bdd) (f : bdd) : bdd = 
+    (* If t is a node, var t > v *)
+    requires { is_node t -> var t > v }
+
+    (* If f is a node, var f > v *)
+    requires { is_node f -> var f > v }
+
+    (* t is well-formed in the hash-consign table *)
+    requires { well_formed hc.tbl t }
+
+    (* f is well-formed in the hash-consign table *)
+    requires { well_formed hc.tbl f }
+    
+    (* The old well-formed bdd are still well-formed *)
+    ensures { still_well_formed (old hc) hc }
+    
+    (* All well-formed BDD in the current hash-consign table where well-formed in the old hash-consign table or 
+       they are the result *)
+    ensures { forall u : bdd. u <> result -> well_formed (old hc).tbl u = well_formed hc.tbl u }
+    
+    (* The result is well-formed *)
+    ensures { well_formed hc.tbl result }
+    
+    (* If t <> f, var result = v *)
+    ensures { t <> f -> var result = v }
+    
+    (* If t = f and is_node t, var result = var t *)
+    ensures { t = f -> is_node t -> var t = var result }
+    
+    (* If result is a node, var result <= v *)
+    ensures { is_node result -> var result >= v }
+    
+    (* Interpretation of a ROBDD *)
+    ensures { forall a : affectation. value a result = if a v then value a t else value a f }
+    
+    if eq0 t f then
+      t
+    else
+      let bdd_candidate = N v t f 0 in
+      try
+        HCMap.find hc.tbl bdd_candidate
+      with HCMap.NotFound -> 
+        let new_node = N v t f hc.next_id in
+        HCMap.put hc.tbl bdd_candidate new_node;
+        hc.next_id <- hc.next_id + 1;
+        new_node
+      end
+  
+  (* Because every BDD is create with create_node, with an Hash-Consign Table, we "morally" extend eq0 to every BDD. *)
+  val predicate eq (bdd1 bdd2 : bdd)
+    ensures { result <-> bdd1 = bdd2 }
+end
+
+
+module NotOp
+  use BDD
+  use int.Int
+  
+  (* Test if 'result_bdd' is the correct value of the 'original' bdd by the not operation *)
+  predicate is_not_bdd (not_bdd : bdd) (orig_bdd : bdd) =
+    forall f : int -> bool. value f not_bdd = not value f orig_bdd
+
+  (* Not operation over the leaf *)
+  let function not_op (b : bdd) : bdd =
+    (* Input is a leaf *)
+    requires { is_leaf b }
+    
+    (* Output is a leaf *)
+    ensures { is_leaf result }
+    
+    (* result is the correct result of leaf for the not operation *)
+    ensures { is_not_bdd result b }
+    
+    match b with
+      | Bottom -> Top
+      | Top -> Bottom
+      | _ -> absurd
+    end
+  
+  clone CustomHashtbl as MemoMap with type key = bdd, val eq = eq, val hash = id
+        
+  type memoMap = { hc : hctable; m : MemoMap.t bdd }
+  
+  (* Top and Bottom are not in the memoisation table *)
+  invariant { not MemoMap.is_in m Top /\ not MemoMap.is_in m Bottom }
+  
+  (* All BDD in the Memoisation Table are in the HashConsign Table *)
+  invariant { forall u : bdd. MemoMap.is_in m u -> mem_tbl hc.tbl u}
+  
+  (* All BDD in the Memoisation Table have their value in the HashConsign Table *)
+  invariant { forall u : bdd. MemoMap.is_in m u -> well_formed hc.tbl (MemoMap.val_of m u) }
+    
+  (* All values are images of the not operation of their key *)
+  invariant { forall u : bdd. MemoMap.is_in m u -> is_not_bdd (MemoMap.val_of m u) u }
+  
+  (* The variable of the keys are <= than the variable of the value (if the value is a *) 
+  invariant { forall u : bdd. MemoMap.is_in m u -> is_node (MemoMap.val_of m u) -> var u <= var (MemoMap.val_of m u) }
+  
+  by { hc = create_hctable (); m = MemoMap.create 16 }
+  
+  let init_memo_map (hc : hctable) : memoMap = { hc = hc ; m = MemoMap.create 16 }
+
+  (** Memoised unary operation *)
+  let rec apply (map : memoMap) (b : bdd) : bdd =
+    (* The input BDD must be well-formed. *)
+    requires { well_formed map.hc.tbl b }
+    
+    (* The result is well-formed *)
+    ensures { well_formed map.hc.tbl result }
+    
+    (* If the input is a node, then it is in the table *)
+    ensures { is_node b -> MemoMap.is_in map.m b }
+
+    (* If the input is a node, then its associated value in the table is the result *)
+    ensures { is_node b -> MemoMap.val_of map.m b = result }
+    
+    (* If the result is a node, then the input must be a node and var result is >= than var b *)
+    ensures { is_node result -> var b <= var result /\ is_node b }
+    
+    (* All the old well-formed bdd in map.hc are still well-formed in map.hc *)
+    ensures { still_well_formed (old map.hc) map.hc }
+    
+    (* All old BDD in the table are concerved and their value too *)
+    ensures { forall u : bdd. MemoMap.is_in (old map).m u -> MemoMap.is_in map.m u /\ MemoMap.val_of (old map).m u = MemoMap.val_of map.m u }
+    
+    (* No changes have been made to the memo_table if the input is a leaf *)
+    ensures { is_leaf b -> forall u : bdd. MemoMap.is_in (old map).m u = MemoMap.is_in map.m u }
+        
+    (* The result is the result of the not operation *)
+    ensures { is_not_bdd result b }
+
+    variant { b }
+    if is_leaf b then 
+      not_op b
+    else
+      try
+        MemoMap.find map.m b
+      with MemoMap.NotFound ->
+          let new_true_branch = apply map (true_branch b) in
+          let new_false_branch = apply map (false_branch b) in
+          let new_value = create_node map.hc (var b) new_true_branch new_false_branch
+          in
+          MemoMap.put map.m b new_value;
+          new_value
+      end
+end
+
+
+module Size
+  use BDD
+  use int.Int
+  use set.Fset
+  use ref.Ref
+
+  (* Subnodes of b *)
+  function subnodes (b : bdd) : fset bdd =
+    match b with
+      | Top | Bottom -> empty 
+      | N _ true_bdd false_bdd _ -> add b (union (subnodes true_bdd) (subnodes false_bdd))
+    end
+  
+  (* If the true branch of a node u is a node, then it is in the subnodes of u *)
+  lemma true_branch_in_sub_nodes:
+    forall u : bdd. is_node u /\ is_node (true_branch u) -> mem (true_branch u) (subnodes u)
+    
+  (* If the false branch of a node u is a node, then it is in the subnodes of u *)
+  lemma false_branch_in_sub_nodes:
+    forall u : bdd. is_node u /\ is_node (false_branch u) -> mem (false_branch u) (subnodes u)
+    
+  (* If u is a subnode of v and true_branch u is a node, then true_branch u is a subnode of v *)
+  lemma sub_nodes_with_true_branch:
+    forall u v [@induction] : bdd. mem u (subnodes v) -> is_node (true_branch u) -> mem (true_branch u) (subnodes v)
+    
+  (* If u is a subnode of v and false_branch u is a node, then false_branch u is a subnode of v *)
+  lemma sub_nodes_with_false_branch:
+    forall u v [@induction] : bdd. mem u (subnodes v) -> is_node (false_branch u) -> mem (false_branch u) (subnodes v)
+    
+  clone CustomHashtbl as HashMap with type key = bdd, val eq = eq, val hash = id
+
+  (* Compute the number of Nodes in a well-formed BDD *)
+  let size (hc : hctable) (in_bdd : bdd) : (int, ghost fset bdd) = 
+    (* in_bdd is well-formed *)
+    requires { well_formed hc.tbl in_bdd }
+    
+    (* The ghost set is the subnodes of in_bdd *)
+    ensures { forall card : int, set : fset bdd. (card, set) = result -> forall u : bdd. mem u set <-> mem u (subnodes in_bdd) }  
+    
+    (* The result is the cardinal of the subnodes of in_bdd *)
+    ensures { forall card : int, set : fset bdd. (card, set) = result -> card = cardinal (subnodes in_bdd) }
+
+    let m = HashMap.create 16 in
+    let ghost ref s = empty in
+    let ref cpt = 0 in
+    
+    let rec loop (b : bdd) = 
+      (* b is a well-formed bdd *)
+      requires { well_formed hc.tbl b }
+      
+      (* b must be a subnode of in_bdd *)
+      requires { is_node b -> mem b (subnodes in_bdd) }
+      
+      (* The hash-table m has the same domain as the ghost set s *)
+      requires { forall u : bdd. mem u s <-> HashMap.is_in m u }
+      
+      (* cpt is the cardinal of the ghost set s *)
+      requires { cpt = cardinal s }
+      
+      (* All the nodes in the ghost set s are subnodes of in_bdd *)
+      requires { forall u : bdd. mem u s -> mem u (subnodes in_bdd) }
+      
+      (* A leaf does not change the ghost set s and its cardinal *)
+      ensures { is_leaf b -> old s = s /\ old cpt = cpt }
+      
+      (* The hash-table m still has the same domain as the ghost set s *)
+      ensures { forall u : bdd. mem u s <-> HashMap.is_in m u }
+
+      (* All the subnodes of b are now in the ghost set s *)
+      ensures { forall u : bdd. mem u (subnodes b) -> mem u s } 
+
+      (* cpt is still the cardinal of the ghost set s *)
+      ensures { cpt = cardinal s }
+      
+      (* The ghost set s is only getting bigger *)
+      ensures { forall u : bdd. mem u (old s) -> mem u s }
+      
+      (* The ghost set s is contained in the subnodes of in_bdd *)
+      ensures { forall u : bdd. mem u s -> mem u (subnodes in_bdd) }
+      
+      variant { b }
+      if is_node b then (
+        loop (true_branch b);
+        loop (false_branch b);
+        if not HashMap.mem m b then (
+          cpt <- cpt + 1;
+          HashMap.put m b ();
+          s <- Fset.add b s
+        )
+      )
+    in
+    loop in_bdd;
+    cpt, s
+end
+
+
+module AndOp
+  use BDD
+  use int.Int
+  
+  (* First member of a tuple *)
+  let function fst (u : ('a, 'b)) : 'a = 
+    let v, _ = u in 
+    v
+  
+  (* Second member of a tuple *)
+  let function snd (u : ('a, 'b)) : 'b = 
+    let _, v = u in 
+    v
+  
+  (* Minimum variable of the input bdd pair *)
+  let function min_var u : int = 
+    requires { is_node (fst u) /\ is_node (snd u) }
+    if var (fst u) < var (snd u) then var (fst u) else var (snd u)
+  
+  (* Binary boolean function to customise *)
+  val function bool_op (b1 b2 : bool) : bool
+  
+  (* Test if 'res_bdd' is the correct value of the 'orig_1' and 'orig_2' bdd by the bool operation *)
+  predicate is_result (and_bdd orig_1 orig_2 : bdd) =
+    forall f : int -> bool. value f and_bdd = bool_op (value f orig_1) (value f orig_2)
+
+  (* operation over leaves *)
+  let function and_op (l r : bdd) : bdd =
+    (* Input bdds are leaves *)
+    requires { is_leaf l /\ is_leaf r }
+    
+    (* Output is a leaf *)
+    ensures { is_leaf result }
+    
+    (* result is the correct for the and operation *)
+    ensures { is_result result l r }
+    
+    bool_to_leaves (bool_op (value (fun _ -> false) l) (value (fun _ -> false) r))
+  
+  (* Tuple equality used for memoisation *)
+  let predicate tuple_eq (t1 t2 : (bdd, bdd)) : bool = 
+    ensures { result <-> t1 = t2 }
+    let l1, r1 = t1 in 
+    let l2, r2 = t2 in 
+    eq l1 l2 && eq r1 r2
+  
+  (* Naive hash function over the tuple of bdd *)
+  let function tuple_hash (bdd_tuple : (bdd, bdd)) : int = 
+    let l, r = bdd_tuple in 
+    id l + id r
+  
+  clone CustomHashtbl as MemoMap with type key = (bdd, bdd), val eq = tuple_eq, val hash = tuple_hash
+  
+  type memoMap = { hc : hctable; m : MemoMap.t bdd }
+  
+  (* Top and Bottom are not in the memoisation table *)
+  invariant { not MemoMap.is_in m (Top, Top)       /\ 
+              not MemoMap.is_in m (Bottom, Top)    /\ 
+              not MemoMap.is_in m (Bottom, Bottom) /\ 
+              not MemoMap.is_in m (Top, Bottom) }
+  
+  
+  (* All keys have a node BDD *)
+  invariant { forall u : (bdd, bdd). MemoMap.is_in m u -> is_node (fst u) \/ is_node (snd u) }
+  
+  (* All BDD of the keys in the Memoisation Table are well-formed in the HashConsign Table *)
+  invariant { forall u : (bdd, bdd). MemoMap.is_in m u -> well_formed hc.tbl (fst u) /\ well_formed hc.tbl (snd u) }
+  
+  (* All BDD in the Memoisation Table have their value in the HashConsign Table *)
+  invariant { forall u : (bdd, bdd). MemoMap.is_in m u -> well_formed hc.tbl (MemoMap.val_of m u) }
+    
+  (* All values are images of the not operation of their key *)
+  invariant { forall u : (bdd, bdd). MemoMap.is_in m u -> is_result (MemoMap.val_of m u) (fst u) (snd u) }
+  
+  (* The variable of the keys are <= than the variable of the value (if the value is a node) *)
+  invariant { forall u : (bdd, bdd). MemoMap.is_in m u -> is_node (MemoMap.val_of m u) -> is_node (fst u) -> is_leaf (snd u) -> var (fst u) <= var (MemoMap.val_of m u) }
+  invariant { forall u : (bdd, bdd). MemoMap.is_in m u -> is_node (MemoMap.val_of m u) -> is_leaf (fst u) -> is_node (snd u) -> var (snd u) <= var (MemoMap.val_of m u) }
+  invariant { forall u : (bdd, bdd). MemoMap.is_in m u -> is_node (MemoMap.val_of m u) -> is_node (fst u) -> is_node (snd u) -> min_var u <= var (MemoMap.val_of m u) }
+  
+  by { hc = create_hctable (); m = MemoMap.create 16 }
+  
+  let init_memo_map (hc : hctable) : memoMap = { hc = hc ; m = MemoMap.create 16 }
+
+  (** Memoised binary operation *)
+  let rec apply (map : memoMap) (l r : bdd) : bdd =
+    (* Input BDDs must be well-formed. *)
+    requires { well_formed map.hc.tbl l /\ well_formed map.hc.tbl r }
+    
+    (* The result is well-formed *)
+    ensures { well_formed map.hc.tbl result }
+    
+    (* If one of the input bdd is a node, then the tuple is in the table *)
+    ensures { is_node l \/ is_node r -> MemoMap.is_in map.m (l, r) }
+
+    (* If the tuple is in the table, then its associated value in the table is the result *)
+    ensures { is_node l \/ is_node r -> MemoMap.val_of map.m (l, r) = result }
+    
+    (* If the result is a node, then one of the input bdd is a node *)
+    ensures { is_node result -> is_node l \/ is_node r }
+    
+    (* If the result if a node and the l is the only node of the input, then the var_id of the result is >= than var_id l *)
+    ensures { is_node result -> is_node l -> is_leaf r -> var l <= var result }
+
+    (* If the result if a node and the r is the only node of the input, then the var_id of the result is >= than var_id r *)
+    ensures { is_node result -> is_leaf l -> is_node r -> var r <= var result }
+    
+    (* If the result if a node and (l, r) are two nodes, then the var_id of the result is >= than min of the var of r and l *)
+    ensures { is_node result -> is_node l -> is_node r -> min_var (l, r) <= var result }
+    
+    (* All the old well-formed bdd in map.hc are still well-formed in map.hc *)
+    ensures { still_well_formed (old map.hc) map.hc }
+    
+    (* All old BDD in the table are concerved and their value too *)
+    ensures { forall u : (bdd, bdd). MemoMap.is_in (old map).m u -> MemoMap.is_in map.m u /\ MemoMap.val_of (old map).m u = MemoMap.val_of map.m u }
+    
+    (* No changes have been made to the memo_table if the input is a tuple of leaf *)
+    ensures { is_leaf l /\ is_leaf r -> forall u : (bdd, bdd). MemoMap.is_in (old map).m u = MemoMap.is_in map.m u }
+        
+    (* The result is the result of the and operation *)
+    ensures { is_result result l r }
+
+    variant { l, r }
+    if is_leaf l && is_leaf r then
+      and_op l r
+    else
+      try
+        MemoMap.find map.m (l, r)
+      with MemoMap.NotFound ->
+        let result = 
+          match (is_leaf l, is_leaf r) with 
+            | True , True  -> (** is_leaf l /\ is_leaf r *)
+                absurd
+            | True , False -> (** is_leaf l /\ is_node r *)
+                create_node map.hc (var r)
+                                   (apply map l (true_branch r))
+                                   (apply map l (false_branch r))
+            | False, True  -> (** is_node l /\ is_leaf r *)
+                create_node map.hc (var l)
+                                   (apply map (true_branch l) r) 
+                                   (apply map (false_branch l) r)
+            | False, False -> (** is_node l /\ is_node r *)
+                if var l = var r then
+                  (** same variable for l and r *)
+                  create_node map.hc (var l) 
+                                     (apply map (true_branch l) (true_branch r))
+                                     (apply map (false_branch l) (false_branch r))
+                else if var l > var r then
+                  (** var l comme after var r *)
+                  create_node map.hc (var r)
+                                     (apply map l (true_branch r))
+                                     (apply map l (false_branch r))
+                else
+                  (** var r comme after var l *)
+                  create_node map.hc (var l)
+                                     (apply map (true_branch l) r) 
+                                     (apply map (false_branch l) r)
+          end
+        in
+        MemoMap.put map.m (l, r) result;
+        result
+      end
+end
