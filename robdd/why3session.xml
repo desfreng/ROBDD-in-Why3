@@ -2050,13 +2050,13 @@
   <proof prover="3"><result status="valid" time="0.19" steps="631064"/></proof>
   </goal>
   <goal name="apply&#39;vc.488" expl="type invariant" proved="true">
-  <proof prover="3"><result status="valid" time="0.29" steps="1039662"/></proof>
+  <proof prover="3"><result status="valid" time="0.47" steps="1039662"/></proof>
   </goal>
   <goal name="apply&#39;vc.489" expl="type invariant" proved="true">
-  <proof prover="3"><result status="valid" time="0.13" steps="861236"/></proof>
+  <proof prover="3"><result status="valid" time="0.40" steps="861236"/></proof>
   </goal>
   <goal name="apply&#39;vc.490" expl="type invariant" proved="true">
-  <proof prover="3"><result status="valid" time="0.09" steps="773975"/></proof>
+  <proof prover="3"><result status="valid" time="0.31" steps="773975"/></proof>
   </goal>
   <goal name="apply&#39;vc.491" expl="type invariant" proved="true">
   <proof prover="3"><result status="valid" time="0.16" steps="718083"/></proof>
@@ -2183,51 +2183,6 @@
   </goal>
   <goal name="apply&#39;vc.532" expl="postcondition" proved="true">
   <proof prover="3"><result status="valid" time="0.03" steps="63385"/></proof>
-  </goal>
-  <goal name="apply&#39;vc.500" expl="type invariant">
-  <proof prover="3"><result status="valid" time="0.05" steps="98873"/></proof>
-  </goal>
-  <goal name="apply&#39;vc.468" expl="type invariant">
-  <proof prover="3"><result status="valid" time="0.05" steps="77897"/></proof>
-  </goal>
-  <goal name="apply&#39;vc.530" expl="type invariant">
-  <proof prover="3"><result status="valid" time="0.02" steps="98599"/></proof>
-  </goal>
-  <goal name="apply&#39;vc.332" expl="type invariant">
-  <proof prover="3"><result status="valid" time="0.02" steps="56085"/></proof>
-  </goal>
-  <goal name="apply&#39;vc.300" expl="type invariant">
-  <proof prover="3"><result status="valid" time="0.01" steps="57246"/></proof>
-  </goal>
-  <goal name="apply&#39;vc.362" expl="type invariant">
-  <proof prover="3"><result status="valid" time="0.06" steps="55958"/></proof>
-  </goal>
-  <goal name="apply&#39;vc.434" expl="type invariant">
-  <proof prover="3"><result status="valid" time="0.05" steps="166327"/></proof>
-  </goal>
-  <goal name="apply&#39;vc.266" expl="type invariant">
-  <proof prover="3"><result status="valid" time="0.03" steps="54457"/></proof>
-  </goal>
-  <goal name="apply&#39;vc.404" expl="type invariant">
-  <proof prover="3"><result status="valid" time="0.04" steps="59303"/></proof>
-  </goal>
-  <goal name="apply&#39;vc.236" expl="type invariant">
-  <proof prover="3"><result status="valid" time="0.02" steps="70992"/></proof>
-  </goal>
-  <goal name="apply&#39;vc.142" expl="type invariant">
-  <proof prover="3"><result status="valid" time="0.03" steps="56085"/></proof>
-  </goal>
-  <goal name="apply&#39;vc.110" expl="type invariant">
-  <proof prover="3"><result status="valid" time="0.02" steps="57246"/></proof>
-  </goal>
-  <goal name="apply&#39;vc.172" expl="type invariant">
-  <proof prover="3"><result status="valid" time="0.05" steps="55958"/></proof>
-  </goal>
-  <goal name="apply&#39;vc.76" expl="type invariant">
-  <proof prover="3"><result status="valid" time="0.03" steps="54457"/></proof>
-  </goal>
-  <goal name="apply&#39;vc.46" expl="type invariant">
-  <proof prover="3"><result status="valid" time="0.04" steps="71635"/></proof>
   </goal>
  </transf>
  </goal>
