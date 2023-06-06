@@ -9,1206 +9,1184 @@
 <path name=".."/><path name="robdd-no-smoke.mlw"/>
 <theory name="BDDType" proved="true">
  <goal name="true_branch&#39;vc" expl="VC for true_branch" proved="true">
- <proof prover="2"><result status="valid" time="0.01" steps="5847"/></proof>
+ <proof prover="2"><result status="valid" time="0.01" steps="5032"/></proof>
  </goal>
  <goal name="false_branch&#39;vc" expl="VC for false_branch" proved="true">
- <proof prover="2"><result status="valid" time="0.01" steps="6395"/></proof>
+ <proof prover="2"><result status="valid" time="0.01" steps="5580"/></proof>
  </goal>
  <goal name="var&#39;vc" expl="VC for var" proved="true">
- <proof prover="2"><result status="valid" time="0.01" steps="6943"/></proof>
+ <proof prover="2"><result status="valid" time="0.01" steps="6128"/></proof>
  </goal>
  <goal name="value&#39;vc" expl="VC for value" proved="true">
- <proof prover="2"><result status="valid" time="0.01" steps="7553"/></proof>
+ <proof prover="2"><result status="valid" time="0.01" steps="6738"/></proof>
  </goal>
  <goal name="bool_to_leaf&#39;vc" expl="VC for bool_to_leaf" proved="true">
- <proof prover="1"><result status="valid" time="0.01" steps="29"/></proof>
- </goal>
- <goal name="hash0&#39;vc" expl="VC for hash0" proved="true">
- <proof prover="2"><result status="valid" time="0.01" steps="877"/></proof>
- </goal>
- <goal name="hash1&#39;vc" expl="VC for hash1" proved="true">
- <proof prover="2"><result status="valid" time="0.01" steps="9356"/></proof>
- </goal>
- <goal name="tuple_hash0&#39;vc" expl="VC for tuple_hash0" proved="true">
- <proof prover="2"><result status="valid" time="0.01" steps="1225"/></proof>
+ <proof prover="1"><result status="valid" time="0.01" steps="20"/></proof>
  </goal>
 </theory>
 <theory name="Hashtbl" proved="true">
  <goal name="t&#39;vc" expl="VC for t" proved="true">
- <proof prover="2"><result status="valid" time="0.01" steps="2781"/></proof>
- </goal>
-</theory>
-<theory name="HashConsingHashtbl" proved="true">
- <goal name="same_hash_if_equal" proved="true">
- <proof prover="2"><result status="valid" time="0.01" steps="1347"/></proof>
- </goal>
-</theory>
-<theory name="BDDAssociationMap" proved="true">
- <goal name="same_hash_if_equal" proved="true">
- <proof prover="2"><result status="valid" time="0.01" steps="1347"/></proof>
- </goal>
-</theory>
-<theory name="BDDTupleAssociationMap" proved="true">
- <goal name="same_hash_if_equal" proved="true">
- <proof prover="2"><result status="valid" time="0.01" steps="1347"/></proof>
+ <proof prover="2"><result status="valid" time="0.01" steps="1167"/></proof>
  </goal>
 </theory>
 <theory name="BDD" proved="true">
  <goal name="hctable&#39;vc" expl="VC for hctable" proved="true">
- <proof prover="2"><result status="valid" time="0.01" steps="309310"/></proof>
+ <proof prover="2"><result status="valid" time="0.01" steps="28921"/></proof>
  </goal>
  <goal name="bdd_is_unique" proved="true">
- <proof prover="2"><result status="valid" time="0.01" steps="268884"/></proof>
+ <proof prover="2"><result status="valid" time="0.01" steps="26615"/></proof>
+ </goal>
+ <goal name="eq1_match_logic" proved="true">
+ <proof prover="2"><result status="valid" time="0.02" steps="34838"/></proof>
  </goal>
  <goal name="eq0_match_logic" proved="true">
- <proof prover="2"><result status="valid" time="0.01" steps="55511"/></proof>
+ <proof prover="2"><result status="valid" time="0.01" steps="27661"/></proof>
  </goal>
  <goal name="create_hctable&#39;vc" expl="VC for create_hctable" proved="true">
- <proof prover="2"><result status="valid" time="0.01" steps="250695"/></proof>
+ <proof prover="2"><result status="valid" time="0.01" steps="30086"/></proof>
  </goal>
  <goal name="create_node&#39;vc" expl="VC for create_node" proved="true">
  <transf name="split_vc" proved="true" >
   <goal name="create_node&#39;vc.0" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="31890"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="24954"/></proof>
   </goal>
   <goal name="create_node&#39;vc.1" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="2749"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="2233"/></proof>
   </goal>
   <goal name="create_node&#39;vc.2" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="2746"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="2230"/></proof>
   </goal>
   <goal name="create_node&#39;vc.3" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="32179"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="25231"/></proof>
   </goal>
   <goal name="create_node&#39;vc.4" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="2762"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="2246"/></proof>
   </goal>
   <goal name="create_node&#39;vc.5" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="31513"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="24672"/></proof>
   </goal>
   <goal name="create_node&#39;vc.6" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="48598"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="26916"/></proof>
   </goal>
   <goal name="create_node&#39;vc.7" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="2935"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="2423"/></proof>
   </goal>
   <goal name="create_node&#39;vc.8" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="33793"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="26624"/></proof>
   </goal>
   <goal name="create_node&#39;vc.9" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="2880"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="2364"/></proof>
   </goal>
   <goal name="create_node&#39;vc.10" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="124617"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="53627"/></proof>
   </goal>
   <goal name="create_node&#39;vc.11" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="54903"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="29509"/></proof>
   </goal>
   <goal name="create_node&#39;vc.12" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="35482"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="28111"/></proof>
   </goal>
   <goal name="create_node&#39;vc.13" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="34921"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="27658"/></proof>
   </goal>
   <goal name="create_node&#39;vc.14" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="106887"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="36762"/></proof>
   </goal>
   <goal name="create_node&#39;vc.15" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="3101"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="2589"/></proof>
   </goal>
   <goal name="create_node&#39;vc.16" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="65706"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="31084"/></proof>
   </goal>
   <goal name="create_node&#39;vc.17" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="136906"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="38496"/></proof>
   </goal>
   <goal name="create_node&#39;vc.18" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.06" steps="305966"/></proof>
+  <proof prover="2"><result status="valid" time="0.06" steps="39565"/></proof>
   </goal>
   <goal name="create_node&#39;vc.19" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="113653"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="37712"/></proof>
   </goal>
   <goal name="create_node&#39;vc.20" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.07" steps="318686"/></proof>
+  <proof prover="2"><result status="valid" time="0.07" steps="51326"/></proof>
   </goal>
   <goal name="create_node&#39;vc.21" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.07" steps="408855"/></proof>
+  <proof prover="2"><result status="valid" time="0.07" steps="81499"/></proof>
   </goal>
   <goal name="create_node&#39;vc.22" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="124118"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="40234"/></proof>
   </goal>
   <goal name="create_node&#39;vc.23" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.06" steps="167345"/></proof>
+  <proof prover="2"><result status="valid" time="0.06" steps="56480"/></proof>
   </goal>
   <goal name="create_node&#39;vc.24" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.07" steps="302206"/></proof>
+  <proof prover="2"><result status="valid" time="0.07" steps="111983"/></proof>
   </goal>
   <goal name="create_node&#39;vc.25" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="38196"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="33625"/></proof>
   </goal>
   <goal name="create_node&#39;vc.26" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="104893"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="42821"/></proof>
   </goal>
   <goal name="create_node&#39;vc.27" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="61396"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="34336"/></proof>
   </goal>
   <goal name="create_node&#39;vc.28" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="76496"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="34678"/></proof>
   </goal>
   <goal name="create_node&#39;vc.29" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.05" steps="194813"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="173602"/></proof>
   </goal>
   <goal name="create_node&#39;vc.30" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="39266"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="31297"/></proof>
   </goal>
   <goal name="create_node&#39;vc.31" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="38353"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="30868"/></proof>
   </goal>
   <goal name="create_node&#39;vc.32" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="37634"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="30245"/></proof>
   </goal>
   <goal name="create_node&#39;vc.33" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="75530"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="34902"/></proof>
   </goal>
   <goal name="create_node&#39;vc.34" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="39230"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="33103"/></proof>
   </goal>
  </transf>
  </goal>
 </theory>
 <theory name="Not" proved="true">
  <goal name="memoMap&#39;vc" expl="VC for memoMap" proved="true">
- <proof prover="2"><result status="valid" time="0.03" steps="108201"/></proof>
+ <proof prover="2"><result status="valid" time="0.03" steps="32675"/></proof>
  </goal>
  <goal name="init_memo_map&#39;vc" expl="VC for init_memo_map" proved="true">
- <proof prover="2"><result status="valid" time="0.02" steps="64753"/></proof>
+ <proof prover="2"><result status="valid" time="0.02" steps="33588"/></proof>
  </goal>
  <goal name="apply&#39;vc" expl="VC for apply" proved="true">
  <transf name="split_vc" proved="true" >
   <goal name="apply&#39;vc.0" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="41820"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="36467"/></proof>
   </goal>
   <goal name="apply&#39;vc.1" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="41355"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="33712"/></proof>
   </goal>
   <goal name="apply&#39;vc.2" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="42327"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="34612"/></proof>
   </goal>
   <goal name="apply&#39;vc.3" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="42724"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="34977"/></proof>
   </goal>
   <goal name="apply&#39;vc.4" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="43670"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="35871"/></proof>
   </goal>
   <goal name="apply&#39;vc.5" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="3785"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="3218"/></proof>
   </goal>
   <goal name="apply&#39;vc.6" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="3772"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="3205"/></proof>
   </goal>
   <goal name="apply&#39;vc.7" expl="postcondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.01" steps="100"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="142598"/></proof>
   </goal>
   <goal name="apply&#39;vc.8" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="3787"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="3224"/></proof>
   </goal>
   <goal name="apply&#39;vc.9" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="41814"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="36461"/></proof>
   </goal>
   <goal name="apply&#39;vc.10" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="41361"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="33718"/></proof>
   </goal>
   <goal name="apply&#39;vc.11" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="42333"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="34618"/></proof>
   </goal>
   <goal name="apply&#39;vc.12" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="42718"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="34971"/></proof>
   </goal>
   <goal name="apply&#39;vc.13" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="43670"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="35871"/></proof>
   </goal>
   <goal name="apply&#39;vc.14" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="3785"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="3218"/></proof>
   </goal>
   <goal name="apply&#39;vc.15" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="3772"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="3205"/></proof>
   </goal>
   <goal name="apply&#39;vc.16" expl="postcondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.01" steps="100"/></proof>
+  <proof prover="1"><result status="valid" time="0.01" steps="80"/></proof>
   </goal>
   <goal name="apply&#39;vc.17" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="3787"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="3224"/></proof>
   </goal>
   <goal name="apply&#39;vc.18" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="42616"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="36742"/></proof>
   </goal>
   <goal name="apply&#39;vc.19" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="3695"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="3128"/></proof>
   </goal>
   <goal name="apply&#39;vc.20" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="3716"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="3149"/></proof>
   </goal>
   <goal name="apply&#39;vc.21" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="106572"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="43124"/></proof>
   </goal>
   <goal name="apply&#39;vc.22" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="45493"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="40297"/></proof>
   </goal>
   <goal name="apply&#39;vc.23" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="3805"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="3238"/></proof>
   </goal>
   <goal name="apply&#39;vc.24" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="3792"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="3225"/></proof>
   </goal>
   <goal name="apply&#39;vc.25" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="56186"/></proof>
+  <proof prover="1"><result status="valid" time="0.01" steps="204"/></proof>
   </goal>
   <goal name="apply&#39;vc.26" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="3807"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="3244"/></proof>
   </goal>
   <goal name="apply&#39;vc.27" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="39943"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="35077"/></proof>
   </goal>
   <goal name="apply&#39;vc.28" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="44750"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="36382"/></proof>
   </goal>
   <goal name="apply&#39;vc.29" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="50323"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="36555"/></proof>
   </goal>
   <goal name="apply&#39;vc.30" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="44799"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="40029"/></proof>
   </goal>
   <goal name="apply&#39;vc.31" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="50768"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="42197"/></proof>
   </goal>
   <goal name="apply&#39;vc.32" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="56635"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="42604"/></proof>
   </goal>
   <goal name="apply&#39;vc.33" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="48012"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="43302"/></proof>
   </goal>
   <goal name="apply&#39;vc.34" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.05" steps="215740"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="62540"/></proof>
   </goal>
   <goal name="apply&#39;vc.35" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.05" steps="220036"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="62558"/></proof>
   </goal>
   <goal name="apply&#39;vc.36" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="52354"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="46056"/></proof>
   </goal>
   <goal name="apply&#39;vc.37" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="4229"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="3676"/></proof>
   </goal>
   <goal name="apply&#39;vc.38" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="105513"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="51954"/></proof>
   </goal>
   <goal name="apply&#39;vc.39" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.04" steps="175720"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="79169"/></proof>
   </goal>
   <goal name="apply&#39;vc.40" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.09" steps="431854"/></proof>
+  <proof prover="2"><result status="valid" time="0.09" steps="87776"/></proof>
   </goal>
   <goal name="apply&#39;vc.41" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.25" steps="681320"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="139012"/></proof>
   </goal>
   <goal name="apply&#39;vc.42" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.27" steps="1171406"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="158415"/></proof>
   </goal>
   <goal name="apply&#39;vc.43" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="13337"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="12097"/></proof>
   </goal>
   <goal name="apply&#39;vc.44" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="55902"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="49329"/></proof>
   </goal>
   <goal name="apply&#39;vc.45" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="58086"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="51357"/></proof>
   </goal>
   <goal name="apply&#39;vc.46" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="54873"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="49921"/></proof>
   </goal>
   <goal name="apply&#39;vc.47" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.04" steps="60366"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="51363"/></proof>
   </goal>
   <goal name="apply&#39;vc.48" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.04" steps="65603"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="53522"/></proof>
   </goal>
   <goal name="apply&#39;vc.49" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="57780"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="51017"/></proof>
   </goal>
   <goal name="apply&#39;vc.50" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="90731"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="54367"/></proof>
   </goal>
   <goal name="apply&#39;vc.51" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="62089"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="52425"/></proof>
   </goal>
  </transf>
  </goal>
 </theory>
 <theory name="Size" proved="true">
  <goal name="true_branch_in_sub_nodes" proved="true">
- <proof prover="2"><result status="valid" time="0.02" steps="91416"/></proof>
+ <proof prover="2"><result status="valid" time="0.02" steps="69044"/></proof>
  </goal>
  <goal name="false_branch_in_sub_nodes" proved="true">
- <proof prover="2"><result status="valid" time="0.02" steps="91998"/></proof>
+ <proof prover="2"><result status="valid" time="0.02" steps="69564"/></proof>
  </goal>
  <goal name="sub_nodes_with_true_branch" proved="true">
  <transf name="induction_ty_lex" proved="true" >
   <goal name="sub_nodes_with_true_branch.0" proved="true">
-  <proof prover="1"><result status="valid" time="0.01" steps="238"/></proof>
+  <proof prover="1"><result status="valid" time="0.01" steps="146"/></proof>
   </goal>
  </transf>
  </goal>
  <goal name="sub_nodes_with_false_branch" proved="true">
  <transf name="induction_ty_lex" proved="true" >
   <goal name="sub_nodes_with_false_branch.0" proved="true">
-  <proof prover="1"><result status="valid" time="0.01" steps="290"/></proof>
-  <proof prover="2"><result status="valid" time="0.87" steps="2993923"/></proof>
+  <proof prover="1"><result status="valid" time="0.01" steps="199"/></proof>
   </goal>
  </transf>
  </goal>
  <goal name="size&#39;vc" expl="VC for size" proved="true">
  <transf name="split_vc" proved="true" >
   <goal name="size&#39;vc.0" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.13" steps="150873"/></proof>
+  <proof prover="2"><result status="valid" time="0.13" steps="140233"/></proof>
   </goal>
   <goal name="size&#39;vc.1" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.06" steps="210418"/></proof>
+  <proof prover="2"><result status="valid" time="0.06" steps="195924"/></proof>
   </goal>
   <goal name="size&#39;vc.2" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.06" steps="209182"/></proof>
+  <proof prover="2"><result status="valid" time="0.06" steps="198694"/></proof>
   </goal>
   <goal name="size&#39;vc.3" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="94505"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="88825"/></proof>
   </goal>
   <goal name="size&#39;vc.4" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="92467"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="87074"/></proof>
   </goal>
   <goal name="size&#39;vc.5" expl="precondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.01" steps="567"/></proof>
+  <proof prover="1"><result status="valid" time="0.01" steps="399"/></proof>
   </goal>
   <goal name="size&#39;vc.6" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="93513"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="88114"/></proof>
   </goal>
   <goal name="size&#39;vc.7" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="87386"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="82366"/></proof>
   </goal>
   <goal name="size&#39;vc.8" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.07" steps="212443"/></proof>
+  <proof prover="2"><result status="valid" time="0.07" steps="197942"/></proof>
   </goal>
   <goal name="size&#39;vc.9" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.06" steps="288888"/></proof>
+  <proof prover="2"><result status="valid" time="0.06" steps="269188"/></proof>
   </goal>
   <goal name="size&#39;vc.10" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.10" steps="286464"/></proof>
+  <proof prover="2"><result status="valid" time="0.10" steps="273184"/></proof>
   </goal>
   <goal name="size&#39;vc.11" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="97494"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="91702"/></proof>
   </goal>
   <goal name="size&#39;vc.12" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="94535"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="89142"/></proof>
   </goal>
   <goal name="size&#39;vc.13" expl="precondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.01" steps="158"/></proof>
+  <proof prover="1"><result status="valid" time="0.01" steps="131"/></proof>
   </goal>
   <goal name="size&#39;vc.14" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="7130"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="6555"/></proof>
   </goal>
   <goal name="size&#39;vc.15" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="94977"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="89584"/></proof>
   </goal>
   <goal name="size&#39;vc.16" expl="postcondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.01" steps="146"/></proof>
+  <proof prover="1"><result status="valid" time="0.01" steps="119"/></proof>
   </goal>
   <goal name="size&#39;vc.17" expl="postcondition" proved="true">
-  <proof prover="0"><result status="valid" time="0.18" steps="37249"/></proof>
+  <proof prover="0"><result status="valid" time="0.18" steps="33663"/></proof>
   </goal>
   <goal name="size&#39;vc.18" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="7242"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="6667"/></proof>
   </goal>
   <goal name="size&#39;vc.19" expl="postcondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.04" steps="476"/></proof>
-  <proof prover="2"><result status="valid" time="0.11" steps="214010"/></proof>
+  <proof prover="1"><result status="valid" time="0.04" steps="416"/></proof>
+  <proof prover="2"><result status="valid" time="0.11" steps="202880"/></proof>
   </goal>
   <goal name="size&#39;vc.20" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="96625"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="91232"/></proof>
   </goal>
   <goal name="size&#39;vc.21" expl="postcondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.02" steps="129"/></proof>
+  <proof prover="1"><result status="valid" time="0.02" steps="102"/></proof>
   </goal>
   <goal name="size&#39;vc.22" expl="postcondition" proved="true">
-  <proof prover="0"><result status="valid" time="0.40" steps="66549"/></proof>
+  <proof prover="0"><result status="valid" time="0.40" steps="61326"/></proof>
   </goal>
   <goal name="size&#39;vc.23" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="7139"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="6564"/></proof>
   </goal>
   <goal name="size&#39;vc.24" expl="postcondition" proved="true">
-  <proof prover="0"><result status="valid" time="0.09" steps="20589"/></proof>
-  <proof prover="2"><result status="valid" time="0.04" steps="102247"/></proof>
+  <proof prover="0"><result status="valid" time="0.09" steps="19120"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="96258"/></proof>
   </goal>
   <goal name="size&#39;vc.25" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="94977"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="89584"/></proof>
   </goal>
   <goal name="size&#39;vc.26" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.11" steps="154248"/></proof>
+  <proof prover="2"><result status="valid" time="0.11" steps="143365"/></proof>
   </goal>
   <goal name="size&#39;vc.27" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.05" steps="210709"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="196103"/></proof>
   </goal>
   <goal name="size&#39;vc.28" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.05" steps="211249"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="198844"/></proof>
   </goal>
   <goal name="size&#39;vc.29" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="94954"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="89204"/></proof>
   </goal>
   <goal name="size&#39;vc.30" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="92773"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="87380"/></proof>
   </goal>
   <goal name="size&#39;vc.31" expl="precondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.05" steps="376"/></proof>
+  <proof prover="1"><result status="valid" time="0.05" steps="405"/></proof>
   </goal>
   <goal name="size&#39;vc.32" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="93821"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="88422"/></proof>
   </goal>
   <goal name="size&#39;vc.33" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="87680"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="82660"/></proof>
   </goal>
   <goal name="size&#39;vc.34" expl="postcondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.01" steps="129"/></proof>
+  <proof prover="1"><result status="valid" time="0.01" steps="102"/></proof>
   </goal>
   <goal name="size&#39;vc.35" expl="postcondition" proved="true">
-  <proof prover="0"><result status="valid" time="0.41" steps="66059"/></proof>
+  <proof prover="0"><result status="valid" time="0.41" steps="61243"/></proof>
   </goal>
   <goal name="size&#39;vc.36" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="7139"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="6564"/></proof>
   </goal>
   <goal name="size&#39;vc.37" expl="postcondition" proved="true">
-  <proof prover="0"><result status="valid" time="0.08" steps="20594"/></proof>
-  <proof prover="2"><result status="valid" time="0.04" steps="102195"/></proof>
+  <proof prover="0"><result status="valid" time="0.08" steps="19125"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="96206"/></proof>
   </goal>
   <goal name="size&#39;vc.38" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="94925"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="89532"/></proof>
   </goal>
   <goal name="size&#39;vc.39" expl="postcondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.02" steps="328"/></proof>
+  <proof prover="1"><result status="valid" time="0.02" steps="300"/></proof>
   </goal>
   <goal name="size&#39;vc.40" expl="postcondition" proved="true">
-  <proof prover="0"><result status="valid" time="0.40" steps="67198"/></proof>
+  <proof prover="0"><result status="valid" time="0.40" steps="61015"/></proof>
   </goal>
   <goal name="size&#39;vc.41" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="93557"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="88158"/></proof>
   </goal>
   <goal name="size&#39;vc.42" expl="postcondition" proved="true">
-  <proof prover="0"><result status="valid" time="0.08" steps="15559"/></proof>
-  <proof prover="2"><result status="valid" time="0.04" steps="87209"/></proof>
+  <proof prover="0"><result status="valid" time="0.08" steps="14649"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="82207"/></proof>
   </goal>
   <goal name="size&#39;vc.43" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="87638"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="82618"/></proof>
   </goal>
   <goal name="size&#39;vc.44" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="142639"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="132398"/></proof>
   </goal>
   <goal name="size&#39;vc.45" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.08" steps="183614"/></proof>
+  <proof prover="2"><result status="valid" time="0.08" steps="166346"/></proof>
   </goal>
   <goal name="size&#39;vc.46" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.09" steps="202581"/></proof>
+  <proof prover="2"><result status="valid" time="0.09" steps="168706"/></proof>
   </goal>
   <goal name="size&#39;vc.47" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="84110"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="78821"/></proof>
   </goal>
   <goal name="size&#39;vc.48" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="81933"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="76931"/></proof>
   </goal>
   <goal name="size&#39;vc.49" expl="precondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.01" steps="130"/></proof>
+  <proof prover="1"><result status="valid" time="0.01" steps="103"/></proof>
   </goal>
   <goal name="size&#39;vc.50" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="6685"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="6110"/></proof>
   </goal>
   <goal name="size&#39;vc.51" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="82375"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="77373"/></proof>
   </goal>
   <goal name="size&#39;vc.52" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.09" steps="225880"/></proof>
+  <proof prover="2"><result status="valid" time="0.09" steps="208617"/></proof>
   </goal>
   <goal name="size&#39;vc.53" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.04" steps="281312"/></proof>
+  <proof prover="2"><result status="valid" time="0.17" steps="253871"/></proof>
   </goal>
   <goal name="size&#39;vc.54" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.09" steps="306310"/></proof>
+  <proof prover="2"><result status="valid" time="0.09" steps="257833"/></proof>
   </goal>
   <goal name="size&#39;vc.55" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.04" steps="86905"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="81504"/></proof>
   </goal>
   <goal name="size&#39;vc.56" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="83834"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="78832"/></proof>
   </goal>
   <goal name="size&#39;vc.57" expl="precondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.06" steps="152"/></proof>
+  <proof prover="1"><result status="valid" time="0.06" steps="125"/></proof>
   </goal>
   <goal name="size&#39;vc.58" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="6818"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="6243"/></proof>
   </goal>
   <goal name="size&#39;vc.59" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="84284"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="79282"/></proof>
   </goal>
   <goal name="size&#39;vc.60" expl="postcondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.01" steps="140"/></proof>
+  <proof prover="1"><result status="valid" time="0.01" steps="113"/></proof>
   </goal>
   <goal name="size&#39;vc.61" expl="postcondition" proved="true">
-  <proof prover="0"><result status="valid" time="1.47" steps="144446"/></proof>
+  <proof prover="0"><result status="valid" time="1.07" steps="132127"/></proof>
   </goal>
   <goal name="size&#39;vc.62" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="6930"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="6355"/></proof>
   </goal>
   <goal name="size&#39;vc.63" expl="postcondition" proved="true">
-  <proof prover="0"><result status="valid" time="0.07" steps="19733"/></proof>
-  <proof prover="2"><result status="valid" time="0.03" steps="85561"/></proof>
+  <proof prover="0"><result status="valid" time="0.07" steps="18246"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="80559"/></proof>
   </goal>
   <goal name="size&#39;vc.64" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.04" steps="85767"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="80765"/></proof>
   </goal>
   <goal name="size&#39;vc.65" expl="postcondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.02" steps="123"/></proof>
+  <proof prover="1"><result status="valid" time="0.02" steps="96"/></proof>
   </goal>
   <goal name="size&#39;vc.66" expl="postcondition" proved="true">
-  <proof prover="0"><result status="valid" time="0.87" steps="112820"/></proof>
+  <proof prover="0"><result status="valid" time="0.87" steps="105745"/></proof>
   </goal>
   <goal name="size&#39;vc.67" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="6827"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="6252"/></proof>
   </goal>
   <goal name="size&#39;vc.68" expl="postcondition" proved="true">
-  <proof prover="0"><result status="valid" time="0.05" steps="15182"/></proof>
-  <proof prover="2"><result status="valid" time="0.03" steps="84029"/></proof>
+  <proof prover="0"><result status="valid" time="0.05" steps="14272"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="79027"/></proof>
   </goal>
   <goal name="size&#39;vc.69" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="83994"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="78992"/></proof>
   </goal>
   <goal name="size&#39;vc.70" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.05" steps="145818"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="135334"/></proof>
   </goal>
   <goal name="size&#39;vc.71" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.05" steps="183867"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="166469"/></proof>
   </goal>
   <goal name="size&#39;vc.72" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.07" steps="204683"/></proof>
+  <proof prover="2"><result status="valid" time="0.07" steps="168802"/></proof>
   </goal>
   <goal name="size&#39;vc.73" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="84541"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="79182"/></proof>
   </goal>
   <goal name="size&#39;vc.74" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="82223"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="77221"/></proof>
   </goal>
   <goal name="size&#39;vc.75" expl="precondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.01" steps="135"/></proof>
-  </goal>
-  <goal name="size&#39;vc.76" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="6715"/></proof>
-  </goal>
-  <goal name="size&#39;vc.77" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="82665"/></proof>
-  </goal>
-  <goal name="size&#39;vc.78" expl="postcondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.02" steps="123"/></proof>
-  </goal>
-  <goal name="size&#39;vc.79" expl="postcondition" proved="true">
-  <proof prover="0"><result status="valid" time="0.53" steps="78272"/></proof>
-  </goal>
-  <goal name="size&#39;vc.80" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.05" steps="6827"/></proof>
-  </goal>
-  <goal name="size&#39;vc.81" expl="postcondition" proved="true">
-  <proof prover="0"><result status="valid" time="0.05" steps="15182"/></proof>
-  <proof prover="2"><result status="valid" time="0.02" steps="83977"/></proof>
-  </goal>
-  <goal name="size&#39;vc.82" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="83942"/></proof>
-  </goal>
-  <goal name="size&#39;vc.83" expl="postcondition" proved="true">
   <proof prover="1"><result status="valid" time="0.01" steps="108"/></proof>
   </goal>
+  <goal name="size&#39;vc.76" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.02" steps="6140"/></proof>
+  </goal>
+  <goal name="size&#39;vc.77" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.02" steps="77663"/></proof>
+  </goal>
+  <goal name="size&#39;vc.78" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.02" steps="96"/></proof>
+  </goal>
+  <goal name="size&#39;vc.79" expl="postcondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.53" steps="70815"/></proof>
+  </goal>
+  <goal name="size&#39;vc.80" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.05" steps="6252"/></proof>
+  </goal>
+  <goal name="size&#39;vc.81" expl="postcondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.05" steps="14272"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="78975"/></proof>
+  </goal>
+  <goal name="size&#39;vc.82" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.02" steps="78940"/></proof>
+  </goal>
+  <goal name="size&#39;vc.83" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.01" steps="81"/></proof>
+  </goal>
   <goal name="size&#39;vc.84" expl="postcondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.60" steps="6891"/></proof>
+  <proof prover="0"><result status="valid" time="0.49" steps="65507"/></proof>
   </goal>
   <goal name="size&#39;vc.85" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="6724"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="6149"/></proof>
   </goal>
   <goal name="size&#39;vc.86" expl="postcondition" proved="true">
-  <proof prover="0"><result status="valid" time="0.02" steps="11657"/></proof>
-  <proof prover="2"><result status="valid" time="0.02" steps="6734"/></proof>
+  <proof prover="0"><result status="valid" time="0.02" steps="10785"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="6159"/></proof>
   </goal>
   <goal name="size&#39;vc.87" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="82388"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="77386"/></proof>
   </goal>
   <goal name="size&#39;vc.88" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="60207"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="55195"/></proof>
   </goal>
   <goal name="size&#39;vc.89" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.04" steps="91921"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="78101"/></proof>
   </goal>
   <goal name="size&#39;vc.90" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="86621"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="78987"/></proof>
   </goal>
   <goal name="size&#39;vc.91" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="81713"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="76711"/></proof>
   </goal>
   <goal name="size&#39;vc.92" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="86855"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="81333"/></proof>
   </goal>
   <goal name="size&#39;vc.93" expl="assertion" proved="true">
-  <proof prover="1"><result status="valid" time="0.01" steps="99"/></proof>
+  <proof prover="1"><result status="valid" time="0.01" steps="67"/></proof>
   </goal>
   <goal name="size&#39;vc.94" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="82832"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="77811"/></proof>
   </goal>
   <goal name="size&#39;vc.95" expl="assertion" proved="true">
-  <proof prover="2"><result status="valid" time="0.13" steps="670782"/></proof>
+  <proof prover="2"><result status="valid" time="0.13" steps="242687"/></proof>
   </goal>
   <goal name="size&#39;vc.96" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="70064"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="65044"/></proof>
   </goal>
  </transf>
  </goal>
 </theory>
 <theory name="BinOp" proved="true">
  <goal name="memoMap&#39;vc" expl="VC for memoMap" proved="true">
- <proof prover="2"><result status="valid" time="0.03" steps="91436"/></proof>
+ <proof prover="2"><result status="valid" time="0.03" steps="46353"/></proof>
  </goal>
  <goal name="init_memo_map&#39;vc" expl="VC for init_memo_map" proved="true">
- <proof prover="2"><result status="valid" time="0.03" steps="90470"/></proof>
+ <proof prover="2"><result status="valid" time="0.03" steps="46989"/></proof>
  </goal>
  <goal name="apply&#39;vc" expl="VC for apply" proved="true">
  <transf name="split_vc" proved="true" >
   <goal name="apply&#39;vc.0" expl="unreachable point" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="51938"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="48224"/></proof>
   </goal>
   <goal name="apply&#39;vc.1" expl="unreachable point" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="51934"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="48220"/></proof>
   </goal>
   <goal name="apply&#39;vc.2" expl="unreachable point" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="51910"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="48196"/></proof>
   </goal>
   <goal name="apply&#39;vc.3" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="72716"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="51769"/></proof>
   </goal>
   <goal name="apply&#39;vc.4" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="93164"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="58657"/></proof>
   </goal>
   <goal name="apply&#39;vc.5" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="50026"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="47588"/></proof>
   </goal>
   <goal name="apply&#39;vc.6" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="51005"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="48567"/></proof>
   </goal>
   <goal name="apply&#39;vc.7" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="53526"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="51035"/></proof>
   </goal>
   <goal name="apply&#39;vc.8" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="53852"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="51361"/></proof>
   </goal>
   <goal name="apply&#39;vc.9" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="54169"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="51678"/></proof>
   </goal>
   <goal name="apply&#39;vc.10" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="53004"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="50585"/></proof>
   </goal>
   <goal name="apply&#39;vc.11" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="4570"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="4204"/></proof>
   </goal>
   <goal name="apply&#39;vc.12" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="4557"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="4191"/></proof>
   </goal>
   <goal name="apply&#39;vc.13" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.35" steps="1805459"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="172147"/></proof>
   </goal>
   <goal name="apply&#39;vc.14" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="50751"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="47291"/></proof>
   </goal>
   <goal name="apply&#39;vc.15" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="49307"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="46869"/></proof>
   </goal>
   <goal name="apply&#39;vc.16" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="4284"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="3918"/></proof>
   </goal>
   <goal name="apply&#39;vc.17" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="4301"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="3935"/></proof>
   </goal>
   <goal name="apply&#39;vc.18" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="53955"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="46812"/></proof>
   </goal>
   <goal name="apply&#39;vc.19" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="54063"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="46920"/></proof>
   </goal>
   <goal name="apply&#39;vc.20" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="55505"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="51811"/></proof>
   </goal>
   <goal name="apply&#39;vc.21" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="52812"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="50321"/></proof>
   </goal>
   <goal name="apply&#39;vc.22" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="4458"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="4092"/></proof>
   </goal>
   <goal name="apply&#39;vc.23" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="4445"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="4079"/></proof>
   </goal>
   <goal name="apply&#39;vc.24" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="54860"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="51328"/></proof>
   </goal>
   <goal name="apply&#39;vc.25" expl="VC for apply" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="5984"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="5546"/></proof>
   </goal>
   <goal name="apply&#39;vc.26" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="47953"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="42118"/></proof>
   </goal>
   <goal name="apply&#39;vc.27" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="50725"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="43582"/></proof>
   </goal>
   <goal name="apply&#39;vc.28" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="50211"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="43322"/></proof>
   </goal>
   <goal name="apply&#39;vc.29" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="53723"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="47513"/></proof>
   </goal>
   <goal name="apply&#39;vc.30" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="58612"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="50112"/></proof>
   </goal>
   <goal name="apply&#39;vc.31" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="63567"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="50794"/></proof>
   </goal>
   <goal name="apply&#39;vc.32" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="57787"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="51310"/></proof>
   </goal>
   <goal name="apply&#39;vc.33" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="67000"/></proof>
+  <proof prover="2"><result status="valid" time="0.13" steps="56370"/></proof>
   </goal>
   <goal name="apply&#39;vc.34" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="67427"/></proof>
+  <proof prover="2"><result status="valid" time="0.11" steps="56785"/></proof>
   </goal>
   <goal name="apply&#39;vc.35" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="4986"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="4620"/></proof>
   </goal>
   <goal name="apply&#39;vc.36" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="65169"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="55568"/></proof>
   </goal>
   <goal name="apply&#39;vc.37" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="101803"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="180771"/></proof>
   </goal>
   <goal name="apply&#39;vc.38" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.12" steps="501865"/></proof>
+  <proof prover="2"><result status="valid" time="0.09" steps="185292"/></proof>
   </goal>
   <goal name="apply&#39;vc.39" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.10" steps="418845"/></proof>
+  <proof prover="2"><result status="valid" time="0.15" steps="430203"/></proof>
   </goal>
   <goal name="apply&#39;vc.40" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.12" steps="590298"/></proof>
+  <proof prover="2"><result status="valid" time="0.13" steps="505431"/></proof>
   </goal>
   <goal name="apply&#39;vc.41" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.52" steps="2078439"/></proof>
+  <proof prover="2"><result status="valid" time="0.24" steps="383661"/></proof>
   </goal>
   <goal name="apply&#39;vc.42" expl="type invariant" proved="true">
-  <proof prover="0"><result status="valid" time="0.25" steps="46596"/></proof>
+  <proof prover="0"><result status="valid" time="0.23" steps="42086"/></proof>
   </goal>
   <goal name="apply&#39;vc.43" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.14" steps="373897"/></proof>
+  <proof prover="2"><result status="valid" time="0.14" steps="206321"/></proof>
   </goal>
   <goal name="apply&#39;vc.44" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="17806"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="17096"/></proof>
   </goal>
   <goal name="apply&#39;vc.45" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="62595"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="56094"/></proof>
   </goal>
   <goal name="apply&#39;vc.46" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.18" steps="587976"/></proof>
+  <proof prover="2"><result status="valid" time="0.14" steps="194648"/></proof>
   </goal>
   <goal name="apply&#39;vc.47" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.12" steps="613927"/></proof>
+  <proof prover="2"><result status="valid" time="0.14" steps="567827"/></proof>
   </goal>
   <goal name="apply&#39;vc.48" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="7882"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="7466"/></proof>
   </goal>
   <goal name="apply&#39;vc.49" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="5235"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="4879"/></proof>
   </goal>
   <goal name="apply&#39;vc.50" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="64735"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="58150"/></proof>
   </goal>
   <goal name="apply&#39;vc.51" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="81719"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="66727"/></proof>
   </goal>
   <goal name="apply&#39;vc.52" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.05" steps="113767"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="79162"/></proof>
   </goal>
   <goal name="apply&#39;vc.53" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="5349"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="4993"/></proof>
   </goal>
   <goal name="apply&#39;vc.54" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="75376"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="64512"/></proof>
   </goal>
   <goal name="apply&#39;vc.55" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="47973"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="42138"/></proof>
   </goal>
   <goal name="apply&#39;vc.56" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="50744"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="43602"/></proof>
   </goal>
   <goal name="apply&#39;vc.57" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="50233"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="43344"/></proof>
   </goal>
   <goal name="apply&#39;vc.58" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="53745"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="47533"/></proof>
   </goal>
   <goal name="apply&#39;vc.59" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="58638"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="50132"/></proof>
   </goal>
   <goal name="apply&#39;vc.60" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="63587"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="50810"/></proof>
   </goal>
   <goal name="apply&#39;vc.61" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="57833"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="51352"/></proof>
   </goal>
   <goal name="apply&#39;vc.62" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="67032"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="56388"/></proof>
   </goal>
   <goal name="apply&#39;vc.63" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="67481"/></proof>
+  <proof prover="1"><result status="valid" time="0.10" steps="493"/></proof>
   </goal>
   <goal name="apply&#39;vc.64" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="4986"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="4620"/></proof>
   </goal>
   <goal name="apply&#39;vc.65" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="65225"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="55610"/></proof>
   </goal>
   <goal name="apply&#39;vc.66" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="101693"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="194125"/></proof>
   </goal>
   <goal name="apply&#39;vc.67" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.09" steps="373851"/></proof>
+  <proof prover="2"><result status="valid" time="0.12" steps="185777"/></proof>
   </goal>
   <goal name="apply&#39;vc.68" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.15" steps="559528"/></proof>
+  <proof prover="2"><result status="valid" time="0.10" steps="320082"/></proof>
   </goal>
   <goal name="apply&#39;vc.69" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.13" steps="574232"/></proof>
+  <proof prover="2"><result status="valid" time="0.12" steps="501062"/></proof>
   </goal>
   <goal name="apply&#39;vc.70" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.24" steps="781200"/></proof>
+  <proof prover="2"><result status="valid" time="0.32" steps="614635"/></proof>
   </goal>
   <goal name="apply&#39;vc.71" expl="type invariant" proved="true">
-  <proof prover="0"><result status="valid" time="0.23" steps="45553"/></proof>
+  <proof prover="0"><result status="valid" time="0.25" steps="37616"/></proof>
   </goal>
   <goal name="apply&#39;vc.72" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.14" steps="404976"/></proof>
+  <proof prover="2"><result status="valid" time="0.14" steps="193507"/></proof>
   </goal>
   <goal name="apply&#39;vc.73" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="17816"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="17106"/></proof>
   </goal>
   <goal name="apply&#39;vc.74" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="62561"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="56056"/></proof>
   </goal>
   <goal name="apply&#39;vc.75" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.14" steps="684252"/></proof>
+  <proof prover="2"><result status="valid" time="0.18" steps="194478"/></proof>
   </goal>
   <goal name="apply&#39;vc.76" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.14" steps="615310"/></proof>
+  <proof prover="2"><result status="valid" time="0.12" steps="586701"/></proof>
   </goal>
   <goal name="apply&#39;vc.77" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="5216"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="4860"/></proof>
   </goal>
   <goal name="apply&#39;vc.78" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="7914"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="7498"/></proof>
   </goal>
   <goal name="apply&#39;vc.79" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="64721"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="58132"/></proof>
   </goal>
   <goal name="apply&#39;vc.80" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="79282"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="64307"/></proof>
   </goal>
   <goal name="apply&#39;vc.81" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.04" steps="111354"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="76722"/></proof>
   </goal>
   <goal name="apply&#39;vc.82" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="5349"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="4993"/></proof>
   </goal>
   <goal name="apply&#39;vc.83" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="75042"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="64160"/></proof>
   </goal>
   <goal name="apply&#39;vc.84" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="48012"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="42173"/></proof>
   </goal>
   <goal name="apply&#39;vc.85" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="48012"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="42173"/></proof>
   </goal>
   <goal name="apply&#39;vc.86" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="48280"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="42429"/></proof>
   </goal>
   <goal name="apply&#39;vc.87" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="48280"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="42429"/></proof>
   </goal>
   <goal name="apply&#39;vc.88" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="52452"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="45104"/></proof>
   </goal>
   <goal name="apply&#39;vc.89" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="51097"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="44149"/></proof>
   </goal>
   <goal name="apply&#39;vc.90" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="54362"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="48114"/></proof>
   </goal>
   <goal name="apply&#39;vc.91" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="54362"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="48114"/></proof>
   </goal>
   <goal name="apply&#39;vc.92" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="61330"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="52121"/></proof>
   </goal>
   <goal name="apply&#39;vc.93" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="68100"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="52715"/></proof>
   </goal>
   <goal name="apply&#39;vc.94" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="58892"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="52343"/></proof>
   </goal>
   <goal name="apply&#39;vc.95" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.13" steps="750518"/></proof>
+  <proof prover="2"><result status="valid" time="0.14" steps="638188"/></proof>
   </goal>
   <goal name="apply&#39;vc.96" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.11" steps="620903"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="438961"/></proof>
   </goal>
   <goal name="apply&#39;vc.97" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="5062"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="4696"/></proof>
   </goal>
   <goal name="apply&#39;vc.98" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="69442"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="57808"/></proof>
   </goal>
   <goal name="apply&#39;vc.99" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.04" steps="131517"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="111924"/></proof>
   </goal>
   <goal name="apply&#39;vc.100" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.22" steps="965469"/></proof>
+  <proof prover="2"><result status="valid" time="0.22" steps="946637"/></proof>
   </goal>
   <goal name="apply&#39;vc.101" expl="type invariant" proved="true">
-  <proof prover="0"><result status="valid" time="0.96" steps="90591"/></proof>
+  <proof prover="0"><result status="valid" time="0.71" steps="72787"/></proof>
   </goal>
   <goal name="apply&#39;vc.102" expl="type invariant" proved="true">
-  <proof prover="0"><result status="valid" time="0.22" steps="42823"/></proof>
+  <proof prover="0"><result status="valid" time="0.22" steps="37820"/></proof>
   </goal>
   <goal name="apply&#39;vc.103" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.29" steps="1556467"/></proof>
+  <proof prover="2"><result status="valid" time="0.51" steps="1627303"/></proof>
   </goal>
   <goal name="apply&#39;vc.104" expl="type invariant" proved="true">
-  <proof prover="0"><result status="valid" time="0.28" steps="46640"/></proof>
+  <proof prover="0"><result status="valid" time="0.28" steps="41734"/></proof>
   </goal>
   <goal name="apply&#39;vc.105" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.34" steps="1001566"/></proof>
+  <proof prover="2"><result status="valid" time="0.34" steps="695044"/></proof>
   </goal>
   <goal name="apply&#39;vc.106" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="18262"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="17552"/></proof>
   </goal>
   <goal name="apply&#39;vc.107" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="62600"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="56031"/></proof>
   </goal>
   <goal name="apply&#39;vc.108" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.50" steps="2234935"/></proof>
+  <proof prover="2"><result status="valid" time="0.34" steps="924249"/></proof>
   </goal>
   <goal name="apply&#39;vc.109" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.37" steps="2131214"/></proof>
+  <proof prover="2"><result status="valid" time="0.55" steps="1108920"/></proof>
   </goal>
   <goal name="apply&#39;vc.110" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="5298"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="4942"/></proof>
   </goal>
   <goal name="apply&#39;vc.111" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="5323"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="4967"/></proof>
   </goal>
   <goal name="apply&#39;vc.112" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="83127"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="69180"/></proof>
   </goal>
   <goal name="apply&#39;vc.113" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="91579"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="72210"/></proof>
   </goal>
   <goal name="apply&#39;vc.114" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.04" steps="133494"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="90006"/></proof>
   </goal>
   <goal name="apply&#39;vc.115" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="5441"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="5085"/></proof>
   </goal>
   <goal name="apply&#39;vc.116" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="83030"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="69329"/></proof>
   </goal>
   <goal name="apply&#39;vc.117" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="48301"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="42446"/></proof>
   </goal>
   <goal name="apply&#39;vc.118" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="48301"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="42446"/></proof>
   </goal>
   <goal name="apply&#39;vc.119" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="48572"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="42709"/></proof>
   </goal>
   <goal name="apply&#39;vc.120" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="51950"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="44637"/></proof>
   </goal>
   <goal name="apply&#39;vc.121" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.04" steps="51216"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="44308"/></proof>
   </goal>
   <goal name="apply&#39;vc.122" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="55937"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="49665"/></proof>
   </goal>
   <goal name="apply&#39;vc.123" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="61494"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="52866"/></proof>
   </goal>
   <goal name="apply&#39;vc.124" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="69651"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="55129"/></proof>
   </goal>
   <goal name="apply&#39;vc.125" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="59827"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="53322"/></proof>
   </goal>
   <goal name="apply&#39;vc.126" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.50" steps="2055314"/></proof>
+  <proof prover="2"><result status="valid" time="0.21" steps="417611"/></proof>
   </goal>
   <goal name="apply&#39;vc.127" expl="precondition" proved="true">
-  <proof prover="1"><result status="valid" time="0.10" steps="781"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="295942"/></proof>
   </goal>
   <goal name="apply&#39;vc.128" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="5042"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="4676"/></proof>
   </goal>
   <goal name="apply&#39;vc.129" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.04" steps="68066"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="58432"/></proof>
   </goal>
   <goal name="apply&#39;vc.130" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.05" steps="171204"/></proof>
+  <proof prover="2"><result status="valid" time="0.07" steps="111090"/></proof>
   </goal>
   <goal name="apply&#39;vc.131" expl="type invariant" proved="true">
-  <proof prover="1"><result status="valid" time="0.39" steps="3213"/></proof>
+  <proof prover="1"><result status="valid" time="0.49" steps="2961"/></proof>
   </goal>
   <goal name="apply&#39;vc.132" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.40" steps="1023165"/></proof>
+  <proof prover="2"><result status="valid" time="0.31" steps="838410"/></proof>
   </goal>
   <goal name="apply&#39;vc.133" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.35" steps="1668159"/></proof>
+  <proof prover="2"><result status="valid" time="0.51" steps="1261747"/></proof>
   </goal>
   <goal name="apply&#39;vc.134" expl="type invariant" proved="true">
-  <proof prover="0"><result status="valid" time="0.24" steps="44056"/></proof>
+  <proof prover="2"><result status="valid" time="0.29" steps="786741"/></proof>
   </goal>
   <goal name="apply&#39;vc.135" expl="type invariant" proved="true">
-  <proof prover="0"><result status="valid" time="0.40" steps="47211"/></proof>
+  <proof prover="0"><result status="valid" time="0.38" steps="42782"/></proof>
   </goal>
   <goal name="apply&#39;vc.136" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.13" steps="562112"/></proof>
+  <proof prover="2"><result status="valid" time="0.12" steps="303685"/></proof>
   </goal>
   <goal name="apply&#39;vc.137" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="20203"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="19425"/></proof>
   </goal>
   <goal name="apply&#39;vc.138" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="61890"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="55461"/></proof>
   </goal>
   <goal name="apply&#39;vc.139" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.10" steps="373937"/></proof>
+  <proof prover="2"><result status="valid" time="0.12" steps="339767"/></proof>
   </goal>
   <goal name="apply&#39;vc.140" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.15" steps="497758"/></proof>
+  <proof prover="2"><result status="valid" time="0.37" steps="806810"/></proof>
   </goal>
   <goal name="apply&#39;vc.141" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="5272"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="4916"/></proof>
   </goal>
   <goal name="apply&#39;vc.142" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="5291"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="4935"/></proof>
   </goal>
   <goal name="apply&#39;vc.143" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="76476"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="65012"/></proof>
   </goal>
   <goal name="apply&#39;vc.144" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="88787"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="71722"/></proof>
   </goal>
   <goal name="apply&#39;vc.145" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.07" steps="163706"/></proof>
+  <proof prover="2"><result status="valid" time="0.06" steps="119955"/></proof>
   </goal>
   <goal name="apply&#39;vc.146" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="5405"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="5049"/></proof>
   </goal>
   <goal name="apply&#39;vc.147" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="75995"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="65099"/></proof>
   </goal>
   <goal name="apply&#39;vc.148" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="48547"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="42688"/></proof>
   </goal>
   <goal name="apply&#39;vc.149" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="51935"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="44627"/></proof>
   </goal>
   <goal name="apply&#39;vc.150" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="51195"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="44291"/></proof>
   </goal>
   <goal name="apply&#39;vc.151" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="55902"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="49636"/></proof>
   </goal>
   <goal name="apply&#39;vc.152" expl="variant decrease" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="61464"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="52848"/></proof>
   </goal>
   <goal name="apply&#39;vc.153" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="69603"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="55110"/></proof>
   </goal>
   <goal name="apply&#39;vc.154" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="59788"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="53291"/></proof>
   </goal>
   <goal name="apply&#39;vc.155" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.36" steps="1643834"/></proof>
+  <proof prover="2"><result status="valid" time="0.09" steps="250299"/></proof>
   </goal>
   <goal name="apply&#39;vc.156" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.58" steps="2496018"/></proof>
+  <proof prover="2"><result status="valid" time="0.09" steps="295400"/></proof>
   </goal>
   <goal name="apply&#39;vc.157" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="5044"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="4678"/></proof>
   </goal>
   <goal name="apply&#39;vc.158" expl="precondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="68025"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="58409"/></proof>
   </goal>
   <goal name="apply&#39;vc.159" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.07" steps="145405"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="110267"/></proof>
   </goal>
   <goal name="apply&#39;vc.160" expl="type invariant" proved="true">
-  <proof prover="1"><result status="valid" time="0.31" steps="2936"/></proof>
+  <proof prover="1"><result status="valid" time="0.39" steps="2834"/></proof>
   </goal>
   <goal name="apply&#39;vc.161" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.31" steps="815006"/></proof>
+  <proof prover="2"><result status="valid" time="0.24" steps="627506"/></proof>
   </goal>
   <goal name="apply&#39;vc.162" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.33" steps="1639339"/></proof>
+  <proof prover="2"><result status="valid" time="0.35" steps="1222911"/></proof>
   </goal>
   <goal name="apply&#39;vc.163" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.44" steps="1928764"/></proof>
+  <proof prover="0"><result status="valid" time="0.24" steps="36345"/></proof>
   </goal>
   <goal name="apply&#39;vc.164" expl="type invariant" proved="true">
-  <proof prover="0"><result status="valid" time="0.38" steps="47868"/></proof>
+  <proof prover="0"><result status="valid" time="0.25" steps="42443"/></proof>
   </goal>
   <goal name="apply&#39;vc.165" expl="type invariant" proved="true">
-  <proof prover="2"><result status="valid" time="0.12" steps="563049"/></proof>
+  <proof prover="2"><result status="valid" time="0.13" steps="303545"/></proof>
   </goal>
   <goal name="apply&#39;vc.166" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="20208"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="19430"/></proof>
   </goal>
   <goal name="apply&#39;vc.167" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="61861"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="55440"/></proof>
   </goal>
   <goal name="apply&#39;vc.168" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.12" steps="373405"/></proof>
+  <proof prover="2"><result status="valid" time="0.10" steps="339236"/></proof>
   </goal>
   <goal name="apply&#39;vc.169" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.18" steps="766178"/></proof>
+  <proof prover="2"><result status="valid" time="0.15" steps="516237"/></proof>
   </goal>
   <goal name="apply&#39;vc.170" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="5272"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="4916"/></proof>
   </goal>
   <goal name="apply&#39;vc.171" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.01" steps="5293"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="4937"/></proof>
   </goal>
   <goal name="apply&#39;vc.172" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="76448"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="65002"/></proof>
   </goal>
   <goal name="apply&#39;vc.173" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.03" steps="88725"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="71701"/></proof>
   </goal>
   <goal name="apply&#39;vc.174" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.06" steps="163612"/></proof>
+  <proof prover="2"><result status="valid" time="0.07" steps="119942"/></proof>
   </goal>
   <goal name="apply&#39;vc.175" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.02" steps="5407"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="5051"/></proof>
   </goal>
   <goal name="apply&#39;vc.176" expl="postcondition" proved="true">
-  <proof prover="2"><result status="valid" time="0.04" steps="75954"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="65076"/></proof>
   </goal>
  </transf>
  </goal>

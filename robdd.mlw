@@ -1,12 +1,12 @@
 module BDDType
+  use mach.peano.Peano
   use int.Int
   use int.EuclideanDivision
-  use mach.int.Int63
 
   type bdd =
     | Bottom
     | Top
-    | N int bdd bdd int (* N (var_id, true_branch, false_branch, node_id) *)
+    | N int bdd bdd Peano.t (* N (var_id, true_branch, false_branch, node_id) *)
 
   type affectation = int -> bool
 
@@ -46,16 +46,16 @@ module BDDType
     end
 
   (** Return the id of provided bdd *)
-  let function id (input : bdd) : int =
+  let function id (input : bdd) : Peano.t =
     match input with
-      | Bottom -> 0
-      | Top -> 1
+      | Bottom -> Peano.zero
+      | Top -> Peano.one
       | N _ _ _ node_id -> node_id
     end
 
   (* Equality of rank 0 *)
   let predicate eq0 (t1 : bdd) (t2 : bdd) : bool =
-    id t1 = id t2
+    eq (id t1) (id t2)
 
   (* Equality of rank 1 *)
   let predicate eq1 (t1 : bdd) (t2 : bdd) : bool =
@@ -65,13 +65,13 @@ module BDDType
           var_1 = var_2 && eq0 true_1 true_2 && eq0 false_1 false_2
       | _ -> False
     end
-    
+
   (* Tuple equality over the BDD *)
   let predicate tuple_eq0 (t1 t2 : (bdd, bdd)) : bool =
     let l1, r1 = t1 in
     let l2, r2 = t2 in
     eq0 l1 l2 && eq0 r1 r2
-    
+
   (* Value of a BDD with a given affectation *)
   let rec function value (f : affectation) (input : bdd) : bool =
     variant { input }
@@ -85,37 +85,16 @@ module BDDType
   let bool_to_leaf (b : bool) : bdd = if b then Top else Bottom
     ensures { forall f : affectation. value f result = b }
     ensures { is_leaf result }
-    
-  (* A bdd hash function at level 0 *)
-  let function hash0 (t : bdd) : int63 =
-    Int63.of_int (mod (id t) Int63.max_int63)
-  
-  (* A bdd hash function at level 1 *)
-  let function hash1 (t : bdd) : int63 =
-    match t with
-      | Top | Bottom -> Int63.of_int (id t)
-      | N v t f _ -> Int63.of_int (mod (v + 8191 * (id t + 8191 * id f)) Int63.max_int63)
-    end
-    
-  (* A tuple of bdd Hash function at level 0 *)
-  let function tuple_hash0 (t : (bdd, bdd)) : int63 =
-    let u, v = t in
-    Int63.of_int (mod (id u + 8191 * id v) Int63.max_int63) 
+
 end
 
 
 module Hashtbl
   use map.Map
-  use mach.int.Int63
 
   type key
 
   val predicate eq key key : bool
-  
-  val function hash key : int63
-  
-  axiom same_hash_if_equal :
-    forall u v : key. u = v -> hash u = hash v
 
   type t 'a = abstract { mutable contents: map key 'a ; mutable domain: map key bool }
   invariant {
@@ -153,23 +132,24 @@ end
 
 module HashConsingHashtbl
   use BDDType
-  clone export Hashtbl with type key = bdd, val eq = eq1, val hash = hash1
+  clone export Hashtbl with type key = bdd, val eq = eq1
 end
 
 module BDDAssociationMap
   use BDDType
-  clone export Hashtbl with type key = bdd, val eq = eq0, val hash = hash0
+  clone export Hashtbl with type key = bdd, val eq = eq0
 end
 
 module BDDTupleAssociationMap
   use BDDType
 
-  clone export Hashtbl with type key = (bdd, bdd), val eq = tuple_eq0, val hash = tuple_hash0
+  clone export Hashtbl with type key = (bdd, bdd), val eq = tuple_eq0
 end
 
 
 module BDD
   use int.Int
+  use mach.peano.Peano
   use export BDDType
   use HashConsingHashtbl as HCMap
 
@@ -181,7 +161,7 @@ module BDD
   predicate well_formed (tbl : HCMap.t bdd) (k : bdd) =
     is_leaf k \/ mem_tbl tbl k
 
-  type hctable = { tbl : HCMap.t bdd; mutable next_id : int }
+  type hctable = { tbl : HCMap.t bdd; mutable next_id : Peano.t }
 
   (* Top and Bottom are not in the Table *)
   invariant { not HCMap.is_in tbl Top /\ not HCMap.is_in tbl Bottom }
@@ -199,10 +179,10 @@ module BDD
   invariant { forall u : bdd. HCMap.is_in tbl u -> eq1 u (HCMap.val_of tbl u) }
 
   (* Each BDD mem_tbl in table has a unique id *)
-  invariant { forall u v : bdd. mem_tbl tbl u /\ mem_tbl tbl v /\ u <> v -> id u <> id v }
+  invariant { forall u v : bdd. mem_tbl tbl u /\ mem_tbl tbl v /\ u <> v -> (id u).v <> (id v).v }
 
   (* Each BDD mem_tbl in table has a id lower than next_id *)
-  invariant { forall u : bdd. mem_tbl tbl u -> id u < next_id }
+  invariant { forall u : bdd. mem_tbl tbl u -> (id u).v < next_id.v }
 
   (* Transitivity of true_branch for the BDD mem_tbl in table *)
   invariant { forall u : bdd. mem_tbl tbl u -> well_formed tbl (true_branch u) }
@@ -216,7 +196,7 @@ module BDD
   (* Each BDD mem_tbl in table have an id greater than 2 *)
   invariant { forall u : bdd. mem_tbl tbl u -> id u >= 2 }
 
-  by { tbl = HCMap.create 16 ; next_id = 2 }
+  by { tbl = HCMap.create 16 ; next_id = Peano.succ Peano.one }
 
   (* Each BDD is now uniquily present in the table *)
   lemma bdd_is_unique :
@@ -229,11 +209,15 @@ module BDD
     forall u : bdd. well_formed old_hc.tbl u -> well_formed new_hc.tbl u
 
   (* With the hash-consign, for well-formed BDD, eq0 is the same as the logical equality *)
+  lemma eq1_match_logic :
+    forall hc : hctable, u v : bdd. well_formed hc.tbl u -> well_formed hc.tbl v -> u = v <-> eq1 u v
+
+  (* With the hash-consign, for well-formed BDD, eq0 is the same as the logical equality *)
   lemma eq0_match_logic :
     forall hc : hctable, u v : bdd. well_formed hc.tbl u -> well_formed hc.tbl v -> u = v <-> eq0 u v
 
   (* Create an empty hctable *)
-  let create_hctable () : hctable = { tbl = HCMap.create 16 ; next_id = 2 }
+  let create_hctable () : hctable = { tbl = HCMap.create 16 ; next_id = Peano.succ Peano.one }
 
   (* From two bdd and a variable, we create a new BDD in the table *)
   let create_node (hc : hctable) (v : int) (t : bdd) (f : bdd) : bdd =
@@ -277,13 +261,13 @@ module BDD
     if eq0 t f then
       t
     else
-      let bdd_candidate = N v t f 0 in
+      let bdd_candidate = N v t f Peano.zero in
       try
         HCMap.find hc.tbl bdd_candidate
       with HCMap.NotFound ->
         let new_node = N v t f hc.next_id in
         HCMap.put hc.tbl bdd_candidate new_node;
-        hc.next_id <- hc.next_id + 1;
+        hc.next_id <- Peano.succ hc.next_id;
         new_node
       end
 end
@@ -296,7 +280,7 @@ module Not
 
   (* Test if 'not_bdd' is the correct value of the 'orig_bdd' bdd by the not operation *)
   predicate is_not_bdd (not_bdd : bdd) (orig_bdd : bdd) =
-    forall f : int -> bool. value f not_bdd = not value f orig_bdd
+    forall f : affectation. value f not_bdd = not value f orig_bdd
 
   type memoMap = { hc : hctable; m : MemoMap.t bdd }
 
@@ -312,7 +296,7 @@ module Not
   (* All values are images of the not operation of their key *)
   invariant { forall u : bdd. mem_tbl hc.tbl u -> MemoMap.is_in m u -> is_not_bdd (MemoMap.val_of m u) u }
 
-  (* The variable of the keys are <= than the variable of the value (if the value is a *)
+  (* The variable of the keys are <= than the variable of the value (if the value is a node) *)
   invariant { forall u : bdd. mem_tbl hc.tbl u -> MemoMap.is_in m u -> is_node (MemoMap.val_of m u) -> var u <= var (MemoMap.val_of m u) }
 
   by { hc = create_hctable (); m = MemoMap.create 16 }
@@ -472,7 +456,7 @@ module BinOp
 
   (* Test if 'res' is the correct value of the 'left' and 'right' bdd by the bool operation *)
   predicate is_result (res left right : bdd) =
-    forall f : int -> bool. value f res = bool_op (value f left) (value f right)
+    forall f : affectation. value f res = bool_op (value f left) (value f right)
 
   type memoMap = { hc : hctable; m : MemoMap.t bdd }
 
@@ -547,7 +531,7 @@ module BinOp
     ensures { is_result result l r }
 
     variant { l, r }
-       if is_leaf l && is_leaf r then
+    if is_leaf l && is_leaf r then
       match l, r with
         | Top,    Top    -> bool_to_leaf (bool_op true true)
         | Top,    Bottom -> bool_to_leaf (bool_op true false)
@@ -559,8 +543,8 @@ module BinOp
         try
           MemoMap.find map.m (l, r)
         with MemoMap.NotFound ->
-          let result = 
-            match (is_leaf l, is_leaf r) with 
+          let result =
+            match (is_leaf l, is_leaf r) with
               | True , True  -> (** is_leaf l /\ is_leaf r *)
                   absurd
               | True , False -> (** is_leaf l /\ is_node r *)
@@ -569,12 +553,12 @@ module BinOp
                                      (apply map l (false_branch r))
               | False, True  -> (** is_node l /\ is_leaf r *)
                   create_node map.hc (var l)
-                                     (apply map (true_branch l) r) 
+                                     (apply map (true_branch l) r)
                                      (apply map (false_branch l) r)
               | False, False -> (** is_node l /\ is_node r *)
                   if var l = var r then
                     (** same variable for l and r *)
-                    create_node map.hc (var l) 
+                    create_node map.hc (var l)
                                        (apply map (true_branch l) (true_branch r))
                                        (apply map (false_branch l) (false_branch r))
                   else if var l > var r then
@@ -585,7 +569,7 @@ module BinOp
                   else
                     (** var r comme after var l *)
                     create_node map.hc (var l)
-                                       (apply map (true_branch l) r) 
+                                       (apply map (true_branch l) r)
                                        (apply map (false_branch l) r)
             end
           in
@@ -608,6 +592,6 @@ end
 
 
 module Implies
-  let function bool_op (a b : bool) : bool = not a || b 
+  let function bool_op (a b : bool) : bool = not a || b
   clone export BinOp with val bool_op = bool_op
 end

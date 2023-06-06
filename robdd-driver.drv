@@ -1,12 +1,15 @@
-
 (** OCaml ROBDD driver *)
+
 
 module robdd.HashConsingHashtbl
   prelude "include Hashtbl.Make(struct \
   \n  open Robdd__BDDType \
   \n  type t = bdd \
   \n  let equal = eq1 \
-  \n  let hash = hash1 \
+  \n  let hash u = \
+  \n    match u with \
+  \n      | Top | Bottom -> id u \
+  \n      | N (v, t, f, _) -> (Z.to_int v) + 8191 * (id t + 8191 * id f) \
   \nend) \n"
 
   syntax type      t        "Robdd__HashConsingHashtbl.t"
@@ -23,7 +26,7 @@ module robdd.BDDAssociationMap
   \n  open Robdd__BDDType \
   \n  type t = bdd \
   \n  let equal = eq0 \
-  \n  let hash = hash0 \
+  \n  let hash u = id u \
   \nend) \n"
 
   syntax type      t        "Robdd__BDDAssociationMap.t"
@@ -40,7 +43,7 @@ module robdd.BDDTupleAssociationMap
   \n  open Robdd__BDDType \
   \n  type t = bdd * bdd \
   \n  let equal = tuple_eq0 \
-  \n  let hash = tuple_hash0 \
+  \n  let hash (u, v) = id u + 8191 * id v\
   \nend) \n"
 
   syntax type      t        "Robdd__BDDTupleAssociationMap.t"

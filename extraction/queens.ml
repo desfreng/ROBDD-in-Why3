@@ -4,6 +4,8 @@ open Robdd.Robdd__Size
 
 let hc = create_hctable ()
 let and_memo = Robdd.Robdd__And.init_memo_map hc
+let or_memo = Robdd.Robdd__Or.init_memo_map hc
+let implies_memo = Robdd.Robdd__Implies.init_memo_map hc
 let not_memo = Robdd.Robdd__Not.init_memo_map hc
 
 (* And operation  *)
@@ -13,10 +15,10 @@ let ( && ) a b = Robdd.Robdd__And.apply and_memo a b
 let ( ! ) a = Robdd.Robdd__Not.apply not_memo a
 
 (* Or operation *)
-let ( || ) a b = !(!a && !b)
+let ( || ) a b = Robdd.Robdd__Or.apply or_memo a b
 
 (* Implication *)
-let ( --> ) a b = !a || b
+let ( --> ) a b = Robdd.Robdd__Implies.apply implies_memo a b
 
 (* forall i. lo <= i < hi -> f i *)
 let rec forall lo hi f = if lo >= hi then Top else f lo && forall (lo + 1) hi f
@@ -48,9 +50,6 @@ let v n i j =
 
 (* forall i. 0 <= i < n, exists j. 0 <= j < n, V i j *)
 let one_queen_per_line n = forall 0 n (fun i -> exists 0 n (fun j -> v n i j))
-
-(* forall j. 0 <= j < n, exists i. 0 <= i < n, V i j *)
-let one_queen_per_column n = forall 0 n (fun j -> exists 0 n (fun i -> v n i j))
 
 (* forall i. 0 <= i < n, forall j. 0 <= j < n, forall j'. 0 <= j' < n, j != j' -> V i j -> !V i j' *)
 let no_queens_same_colunm n =
@@ -88,7 +87,7 @@ let no_queens_same_anti_diagonal n =
               if d != 0 then v n i j --> !(v n (i + d) (j - d)) else Top)))
 
 let queens n =
-  one_queen_per_line n && one_queen_per_column n && no_queens_same_line n
+  one_queen_per_line n (* && one_queen_per_column n *) && no_queens_same_line n
   && no_queens_same_colunm n && no_queens_same_diagonal n
   && no_queens_same_anti_diagonal n
 

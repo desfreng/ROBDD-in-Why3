@@ -1,8 +1,3 @@
-(env
- (dev
-  (flags
-   (:standard -w -27-26-32))))
-
 (executable
  (name queens)
  (modules queens)
@@ -19,5 +14,6 @@
   robdd__Not
   robdd__Size
   robdd__And
-  robdd__Or)
+  robdd__Or
+  robdd__Implies)
  (libraries zarith))
