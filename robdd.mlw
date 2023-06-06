@@ -124,10 +124,10 @@ end
 module CustomHashtbl
   clone export DefaultHashtbl
 
-  val function hash key : int
+  val function hash_func key : int
   
   axiom hash_match_with_equal : 
-    forall k1 k2 : key. eq k1 k2 -> hash k1 = hash k2
+    forall k1 k2 : key. eq k1 k2 -> hash_func k1 = hash_func k2
 end
 
 
@@ -260,7 +260,7 @@ module NotOp
   predicate is_not_bdd (not_bdd : bdd) (orig_bdd : bdd) =
     forall f : int -> bool. value f not_bdd = not value f orig_bdd
   
-  clone CustomHashtbl as MemoMap with type key = bdd, val eq = eq0, val hash = id
+  clone CustomHashtbl as MemoMap with type key = bdd, val eq = eq0, val hash_func = id
         
   type memoMap = { hc : hctable; m : MemoMap.t bdd }
   
@@ -363,7 +363,7 @@ module Size
   lemma sub_nodes_with_false_branch:
     forall u v [@induction] : bdd. mem u (subnodes v) -> is_node (false_branch u) -> mem (false_branch u) (subnodes v)
     
-  clone CustomHashtbl as HashMap with type key = bdd, val eq = eq0, val hash = id
+  clone CustomHashtbl as HashMap with type key = bdd, val eq = eq0, val hash_func = id
 
   (* Compute the number of Nodes in a well-formed BDD *)
   let size (hc : hctable) (in_bdd : bdd) : (card: int) =
@@ -426,7 +426,7 @@ module Size
 end
 
 
-module AndOp
+module BinOp
   use BDD
   use int.Int
   use int.MinMax
@@ -445,13 +445,11 @@ module AndOp
     eq0 l1 l2 && eq0 r1 r2
     
   (* Hash function over the tuple *)
-  val function hash_tuple (t : (bdd, bdd)) : int
+  let function hash_tuple (t : (bdd, bdd)) : int =
+    let u, v = t in
+    id u * id v
   
-  (* Two equals tuple have the same hash *)
-  axiom hash_tuple_eq:
-    forall u v : (bdd, bdd). tuple_eq u v -> hash_tuple u = hash_tuple v
-  
-  clone CustomHashtbl as MemoMap with type key = (bdd, bdd), val eq = tuple_eq, val hash = hash_tuple
+  clone CustomHashtbl as MemoMap with type key = (bdd, bdd), val eq = tuple_eq, val hash_func = hash_tuple
   
   type memoMap = { hc : hctable; m : MemoMap.t bdd }
   
@@ -570,3 +568,14 @@ module AndOp
         end
     end    
 end
+
+(*
+module AndOp
+  use int.Int
+  use int.Abs
+
+  let predicate eq i j = abs (i - j) < 2
+  let function hash i = i
+
+  clone CustomHashtbl with type key = int, val eq = eq, val hash = hash
+end*)

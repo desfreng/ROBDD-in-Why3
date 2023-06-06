@@ -1,0 +1,32 @@
+
+(** OCaml ROBDD driver *)
+
+module robdd.DefaultHashtbl
+  prelude export "module DefHashtbl = Hashtbl.Make(struct \
+  \n  type t = key\
+  \n  let equal = eq\
+  \n  let hash = Hashtbl.hash\
+  \nend) \n"
+  
+  syntax type      t        "DefHashtbl.t"
+  syntax val       create   "DefHashtbl.create %1" prec 4 3 3
+  syntax val       put      "DefHashtbl.add %1 %2 %3" prec 4 3 3
+  syntax exception NotFound "Not_found"
+  syntax val       find     "DefHashtbl.find %1 %2" prec 4 3 3
+  syntax val       mem      "DefHashtbl.mem %1 %2" prec 4 3 3
+end
+
+module robdd.CustomHashtbl
+  prelude export "module CustHashtbl = Hashtbl.Make(struct \
+  \n  type t = key\
+  \n  let equal = eq\
+  \n  let hash i = hash_func i |> Z.to_int\
+  \nend) \n"
+  
+  syntax type      t        "CustHashtbl.t"
+  syntax val       create   "CustHashtbl.create %1" prec 4 3 3
+  syntax val       put      "CustHashtbl.add %1 %2 %3" prec 4 3 3
+  syntax exception NotFound "Not_found"
+  syntax val       find     "CustHashtbl.find %1 %2" prec 4 3 3
+  syntax val       mem      "CustHashtbl.mem %1 %2" prec 4 3 3
+end
