@@ -1,13 +1,23 @@
 (env
  (dev
-  (flags (:standard -w -27-26-32))))
+  (flags
+   (:standard -w -27-26-32))))
 
 (executable
-  (name client)
-  (modules client)
-  (libraries robdd))
+ (name queens)
+ (modules queens)
+ (libraries robdd))
 
 (library
-  (public_name robdd)
-  (modules robdd__BDDType robdd__HashConsingHashtbl robdd__BDD)
-  (libraries zarith))
+ (name robdd)
+ (modules
+  robdd__BDDType
+  robdd__HashConsingHashtbl
+  robdd__BDDAssociationMap
+  robdd__BDDTupleAssociationMap
+  robdd__BDD
+  robdd__Not
+  robdd__Size
+  robdd__And
+  robdd__Or)
+ (libraries zarith))

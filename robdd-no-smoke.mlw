@@ -1,16 +1,18 @@
 module BDDType
   use int.Int
-  
-  type bdd = 
+  use int.EuclideanDivision
+  use mach.int.Int63
+
+  type bdd =
     | Bottom
     | Top
     | N int bdd bdd int (* N (var_id, true_branch, false_branch, node_id) *)
 
   type affectation = int -> bool
-      
-   
+
+
   (** Test whenever provided bdd has a node as root *)
-  let predicate is_node (input : bdd) : bool = 
+  let predicate is_node (input : bdd) : bool =
     match input with
       | Bottom | Top -> false
       | N _ _ _ _ -> true
@@ -20,7 +22,7 @@ module BDDType
   let predicate is_leaf (input : bdd) : bool = not (is_node input)
 
   (** Return the `true_branch` of provided bdd *)
-  let function true_branch (input : bdd) : bdd = 
+  let function true_branch (input : bdd) : bdd =
     requires { is_node input }
     match input with
       | N _ branch _ _ -> branch
@@ -28,7 +30,7 @@ module BDDType
     end
 
   (** Return the `false_branch` of provided bdd *)
-  let function false_branch (input : bdd) : bdd = 
+  let function false_branch (input : bdd) : bdd =
     requires { is_node input }
     match input with
       | N _ _ branch _ -> branch
@@ -36,7 +38,7 @@ module BDDType
     end
 
   (** Return the id of variable of provided bdd *)
-  let function var (input : bdd) : int = 
+  let function var (input : bdd) : int =
     requires { is_node input }
     match input with
       | N var_id _ _ _ -> var_id
@@ -44,7 +46,7 @@ module BDDType
     end
 
   (** Return the id of provided bdd *)
-  let function id (input : bdd) : int = 
+  let function id (input : bdd) : int =
     match input with
       | Bottom -> 0
       | Top -> 1
@@ -52,41 +54,69 @@ module BDDType
     end
 
   (* Equality of rank 0 *)
-  let predicate eq0 (t1 : bdd) (t2 : bdd) : bool = 
+  let predicate eq0 (t1 : bdd) (t2 : bdd) : bool =
     id t1 = id t2
 
   (* Equality of rank 1 *)
-  let predicate eq1 (t1 : bdd) (t2 : bdd) : bool = 
+  let predicate eq1 (t1 : bdd) (t2 : bdd) : bool =
     match t1, t2 with
       | Top, Top | Bottom, Bottom -> True
       | N var_1 true_1 false_1 _, N var_2 true_2 false_2 _ ->
           var_1 = var_2 && eq0 true_1 true_2 && eq0 false_1 false_2
       | _ -> False
     end
-  
+    
+  (* Tuple equality over the BDD *)
+  let predicate tuple_eq0 (t1 t2 : (bdd, bdd)) : bool =
+    let l1, r1 = t1 in
+    let l2, r2 = t2 in
+    eq0 l1 l2 && eq0 r1 r2
+    
   (* Value of a BDD with a given affectation *)
-  let rec function value (f : affectation) (input : bdd) : bool = 
+  let rec function value (f : affectation) (input : bdd) : bool =
     variant { input }
     match input with
       | Top -> True
       | Bottom -> False
-      | N var_id true_b false_b _ -> if f var_id then value f true_b else value f false_b 
+      | N var_id true_b false_b _ -> if f var_id then value f true_b else value f false_b
     end
-  
+
   (* Convert a Boolean to its corresponding leaf *)
   let bool_to_leaf (b : bool) : bdd = if b then Top else Bottom
     ensures { forall f : affectation. value f result = b }
     ensures { is_leaf result }
+    
+  (* A bdd hash function at level 0 *)
+  let function hash0 (t : bdd) : int63 =
+    Int63.of_int (mod (id t) Int63.max_int63)
+  
+  (* A bdd hash function at level 1 *)
+  let function hash1 (t : bdd) : int63 =
+    match t with
+      | Top | Bottom -> Int63.of_int (id t)
+      | N v t f _ -> Int63.of_int (mod (v + 8191 * (id t + 8191 * id f)) Int63.max_int63)
+    end
+    
+  (* A tuple of bdd Hash function at level 0 *)
+  let function tuple_hash0 (t : (bdd, bdd)) : int63 =
+    let u, v = t in
+    Int63.of_int (mod (id u + 8191 * id v) Int63.max_int63) 
 end
 
 
-module DefaultHashtbl
+module Hashtbl
   use map.Map
-  
+  use mach.int.Int63
+
   type key
-  
+
   val predicate eq key key : bool
   
+  val function hash key : int63
+  
+  axiom same_hash_if_equal :
+    forall u v : key. u = v -> hash u = hash v
+
   type t 'a = abstract { mutable contents: map key 'a ; mutable domain: map key bool }
   invariant {
     (      (* All similar key have the same status in the table's domain *)
@@ -95,9 +125,9 @@ module DefaultHashtbl
       forall u v : key. eq u v /\ domain u -> Map.([]) contents u =  Map.([]) contents v
     )
   }
-  by { contents = (fun _ -> any 'a) ; domain = (fun _ -> false) } 
-    
-  function is_in (h: t 'a) (k: key) : bool = 
+  by { contents = (fun _ -> any 'a) ; domain = (fun _ -> false) }
+
+  function is_in (h: t 'a) (k: key) : bool =
     h.domain k
 
   function val_of (h : t 'a) (k : key) : 'a = Map.([]) h.contents k
@@ -121,20 +151,29 @@ module DefaultHashtbl
 end
 
 
-module CustomHashtbl
-  clone export DefaultHashtbl
+module HashConsingHashtbl
+  use BDDType
+  clone export Hashtbl with type key = bdd, val eq = eq1, val hash = hash1
+end
 
-  val function hash key : int
-  
-  axiom hash_match_with_equal : 
-    forall k1 k2 : key. eq k1 k2 -> hash k1 = hash k2
+
+module BDDAssociationMap
+  use BDDType
+  clone export Hashtbl with type key = bdd, val eq = eq0, val hash = hash0
+end
+
+
+module BDDTupleAssociationMap
+  use BDDType
+
+  clone export Hashtbl with type key = (bdd, bdd), val eq = tuple_eq0, val hash = tuple_hash0
 end
 
 
 module BDD
   use int.Int
   use export BDDType
-  clone DefaultHashtbl as HCMap with type key = bdd, val eq = eq1
+  use HashConsingHashtbl as HCMap
 
   (* A value is mem_tbl in the table if it is in the table and it is linked to itself *)
   predicate mem_tbl (tbl : HCMap.t bdd) (k : bdd) = 
@@ -252,15 +291,14 @@ module BDD
 end
 
 
-module NotOp
+module Not
   use BDD
   use int.Int
+  use BDDAssociationMap as MemoMap
   
   (* Test if 'not_bdd' is the correct value of the 'orig_bdd' bdd by the not operation *)
   predicate is_not_bdd (not_bdd : bdd) (orig_bdd : bdd) =
     forall f : int -> bool. value f not_bdd = not value f orig_bdd
-  
-  clone CustomHashtbl as MemoMap with type key = bdd, val eq = eq0, val hash = id
         
   type memoMap = { hc : hctable; m : MemoMap.t bdd }
   
@@ -339,7 +377,8 @@ module Size
   use int.Int
   use set.Fset
   use ref.Ref
-
+  use BDDAssociationMap as HashMap
+  
   (* Subnodes of b *)
   function subnodes (b : bdd) : fset bdd =
     match b with
@@ -362,11 +401,9 @@ module Size
   (* If u is a subnode of v and false_branch u is a node, then false_branch u is a subnode of v *)
   lemma sub_nodes_with_false_branch:
     forall u v [@induction] : bdd. mem u (subnodes v) -> is_node (false_branch u) -> mem (false_branch u) (subnodes v)
-    
-  clone CustomHashtbl as HashMap with type key = bdd, val eq = eq0, val hash = id
 
   (* Compute the number of Nodes in a well-formed BDD *)
-  let size (hc : hctable) (in_bdd : bdd) : (card: int) =
+  let size (ghost hc : hctable) (in_bdd : bdd) : (card: int) =
     (* in_bdd is well-formed *)
     requires { well_formed hc.tbl in_bdd }
     
@@ -426,39 +463,25 @@ module Size
 end
 
 
-module AndOp
+module BinOp
   use BDD
   use int.Int
   use int.MinMax
-  
+  use BDDTupleAssociationMap as MemoMap
+
   (* Binary boolean function to customise *)
   val function bool_op (b1 b2 : bool) : bool
-  
+
   (* Test if 'res' is the correct value of the 'left' and 'right' bdd by the bool operation *)
   predicate is_result (res left right : bdd) =
     forall f : int -> bool. value f res = bool_op (value f left) (value f right)
-  
-  (* Tuple equality used for memoisation *)
-  let predicate tuple_eq (t1 t2 : (bdd, bdd)) : bool = 
-    let l1, r1 = t1 in 
-    let l2, r2 = t2 in 
-    eq0 l1 l2 && eq0 r1 r2
-    
-  (* Hash function over the tuple *)
-  val function hash_tuple (t : (bdd, bdd)) : int
-  
-  (* Two equals tuple have the same hash *)
-  axiom hash_tuple_eq:
-    forall u v : (bdd, bdd). tuple_eq u v -> hash_tuple u = hash_tuple v
-  
-  clone CustomHashtbl as MemoMap with type key = (bdd, bdd), val eq = tuple_eq, val hash = hash_tuple
-  
+
   type memoMap = { hc : hctable; m : MemoMap.t bdd }
-  
+
   (* Top and Bottom are not in the memoisation table *)
-  invariant { not MemoMap.is_in m (Top, Top)       /\ 
-              not MemoMap.is_in m (Bottom, Top)    /\ 
-              not MemoMap.is_in m (Bottom, Bottom) /\ 
+  invariant { not MemoMap.is_in m (Top, Top)       /\
+              not MemoMap.is_in m (Bottom, Top)    /\
+              not MemoMap.is_in m (Bottom, Bottom) /\
               not MemoMap.is_in m (Top, Bottom) }
   
   (* All BDD in the Memoisation Table have their value in the HashConsign Table *)
@@ -571,4 +594,22 @@ module AndOp
           MemoMap.put map.m (l, r) result;
           result
         end
+end
+
+
+module And
+  let function bool_op (a b : bool) : bool = a && b
+  clone export BinOp with val bool_op = bool_op
+end
+
+
+module Or
+  let function bool_op (a b : bool) : bool = a || b
+  clone export BinOp with val bool_op = bool_op
+end
+
+
+module Implies
+  let function bool_op (a b : bool) : bool = not a || b 
+  clone export BinOp with val bool_op = bool_op
 end

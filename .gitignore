@@ -1,2 +1,4 @@
 *.bak
-**/why3shapes.gz
+**/robdd__*.ml
+**/_build/
+**/robdd.opam

@@ -1,5 +1,7 @@
 module BDDType
   use int.Int
+  use int.EuclideanDivision
+  use mach.int.Int63
 
   type bdd =
     | Bottom
@@ -63,7 +65,13 @@ module BDDType
           var_1 = var_2 && eq0 true_1 true_2 && eq0 false_1 false_2
       | _ -> False
     end
-
+    
+  (* Tuple equality over the BDD *)
+  let predicate tuple_eq0 (t1 t2 : (bdd, bdd)) : bool =
+    let l1, r1 = t1 in
+    let l2, r2 = t2 in
+    eq0 l1 l2 && eq0 r1 r2
+    
   (* Value of a BDD with a given affectation *)
   let rec function value (f : affectation) (input : bdd) : bool =
     variant { input }
@@ -77,15 +85,37 @@ module BDDType
   let bool_to_leaf (b : bool) : bdd = if b then Top else Bottom
     ensures { forall f : affectation. value f result = b }
     ensures { is_leaf result }
+    
+  (* A bdd hash function at level 0 *)
+  let function hash0 (t : bdd) : int63 =
+    Int63.of_int (mod (id t) Int63.max_int63)
+  
+  (* A bdd hash function at level 1 *)
+  let function hash1 (t : bdd) : int63 =
+    match t with
+      | Top | Bottom -> Int63.of_int (id t)
+      | N v t f _ -> Int63.of_int (mod (v + 8191 * (id t + 8191 * id f)) Int63.max_int63)
+    end
+    
+  (* A tuple of bdd Hash function at level 0 *)
+  let function tuple_hash0 (t : (bdd, bdd)) : int63 =
+    let u, v = t in
+    Int63.of_int (mod (id u + 8191 * id v) Int63.max_int63) 
 end
 
 
-module DefaultHashtbl
+module Hashtbl
   use map.Map
+  use mach.int.Int63
 
   type key
 
   val predicate eq key key : bool
+  
+  val function hash key : int63
+  
+  axiom same_hash_if_equal :
+    forall u v : key. u = v -> hash u = hash v
 
   type t 'a = abstract { mutable contents: map key 'a ; mutable domain: map key bool }
   invariant {
@@ -121,19 +151,22 @@ module DefaultHashtbl
 end
 
 
-module CustomHashtbl
-  clone export DefaultHashtbl
-
-  val function hash_func key : int
-
-  axiom hash_match_with_equal :
-    forall k1 k2 : key. eq k1 k2 -> hash_func k1 = hash_func k2
-end
-
 module HashConsingHashtbl
   use BDDType
-  clone export DefaultHashtbl with type key = bdd, val eq = eq1
+  clone export Hashtbl with type key = bdd, val eq = eq1, val hash = hash1
 end
+
+module BDDAssociationMap
+  use BDDType
+  clone export Hashtbl with type key = bdd, val eq = eq0, val hash = hash0
+end
+
+module BDDTupleAssociationMap
+  use BDDType
+
+  clone export Hashtbl with type key = (bdd, bdd), val eq = tuple_eq0, val hash = tuple_hash0
+end
+
 
 module BDD
   use int.Int
@@ -256,15 +289,14 @@ module BDD
 end
 
 
-module NotOp
+module Not
   use BDD
   use int.Int
+  use BDDAssociationMap as MemoMap
 
   (* Test if 'not_bdd' is the correct value of the 'orig_bdd' bdd by the not operation *)
   predicate is_not_bdd (not_bdd : bdd) (orig_bdd : bdd) =
     forall f : int -> bool. value f not_bdd = not value f orig_bdd
-
-  clone CustomHashtbl as MemoMap with type key = bdd, val eq = eq0, val hash_func = id
 
   type memoMap = { hc : hctable; m : MemoMap.t bdd }
 
@@ -343,6 +375,7 @@ module Size
   use int.Int
   use set.Fset
   use ref.Ref
+  use BDDAssociationMap as HashMap
 
   (* Subnodes of b *)
   function subnodes (b : bdd) : fset bdd =
@@ -367,15 +400,13 @@ module Size
   lemma sub_nodes_with_false_branch:
     forall u v [@induction] : bdd. mem u (subnodes v) -> is_node (false_branch u) -> mem (false_branch u) (subnodes v)
 
-  clone CustomHashtbl as HashMap with type key = bdd, val eq = eq0, val hash_func = id
-
   (* Compute the number of Nodes in a well-formed BDD *)
-  let size (hc : hctable) (in_bdd : bdd) : (card: int) =
+  let size (ghost hc : hctable) (in_bdd : bdd) : int =
     (* in_bdd is well-formed *)
     requires { well_formed hc.tbl in_bdd }
 
     (* The result is the cardinal of the subnodes of in_bdd *)
-    ensures { card = cardinal (subnodes in_bdd) }
+    ensures { result = cardinal (subnodes in_bdd) }
 
     let m = HashMap.create 16 in
     let ghost ref s = empty in
@@ -434,6 +465,7 @@ module BinOp
   use BDD
   use int.Int
   use int.MinMax
+  use BDDTupleAssociationMap as MemoMap
 
   (* Binary boolean function to customise *)
   val function bool_op (b1 b2 : bool) : bool
@@ -441,19 +473,6 @@ module BinOp
   (* Test if 'res' is the correct value of the 'left' and 'right' bdd by the bool operation *)
   predicate is_result (res left right : bdd) =
     forall f : int -> bool. value f res = bool_op (value f left) (value f right)
-
-  (* Tuple equality used for memoisation *)
-  let predicate tuple_eq (t1 t2 : (bdd, bdd)) : bool =
-    let l1, r1 = t1 in
-    let l2, r2 = t2 in
-    eq0 l1 l2 && eq0 r1 r2
-
-  (* Hash function over the tuple *)
-  let function hash_tuple (t : (bdd, bdd)) : int =
-    let u, v = t in
-    id u * id v
-
-  clone CustomHashtbl as MemoMap with type key = (bdd, bdd), val eq = tuple_eq, val hash_func = hash_tuple
 
   type memoMap = { hc : hctable; m : MemoMap.t bdd }
 
@@ -528,17 +547,20 @@ module BinOp
     ensures { is_result result l r }
 
     variant { l, r }
-    match l, r with
-      | Top,    Top    -> bool_to_leaf (bool_op true true)
-      | Top,    Bottom -> bool_to_leaf (bool_op true false)
-      | Bottom, Top    -> bool_to_leaf (bool_op false true)
-      | Bottom, Bottom -> bool_to_leaf (bool_op false false)
-      | _ ->
+       if is_leaf l && is_leaf r then
+      match l, r with
+        | Top,    Top    -> bool_to_leaf (bool_op true true)
+        | Top,    Bottom -> bool_to_leaf (bool_op true false)
+        | Bottom, Top    -> bool_to_leaf (bool_op false true)
+        | Bottom, Bottom -> bool_to_leaf (bool_op false false)
+        | _ -> absurd
+      end
+    else
         try
           MemoMap.find map.m (l, r)
         with MemoMap.NotFound ->
-          let result =
-            match (is_leaf l, is_leaf r) with
+          let result = 
+            match (is_leaf l, is_leaf r) with 
               | True , True  -> (** is_leaf l /\ is_leaf r *)
                   absurd
               | True , False -> (** is_leaf l /\ is_node r *)
@@ -547,12 +569,12 @@ module BinOp
                                      (apply map l (false_branch r))
               | False, True  -> (** is_node l /\ is_leaf r *)
                   create_node map.hc (var l)
-                                     (apply map (true_branch l) r)
+                                     (apply map (true_branch l) r) 
                                      (apply map (false_branch l) r)
               | False, False -> (** is_node l /\ is_node r *)
                   if var l = var r then
                     (** same variable for l and r *)
-                    create_node map.hc (var l)
+                    create_node map.hc (var l) 
                                        (apply map (true_branch l) (true_branch r))
                                        (apply map (false_branch l) (false_branch r))
                   else if var l > var r then
@@ -563,23 +585,29 @@ module BinOp
                   else
                     (** var r comme after var l *)
                     create_node map.hc (var l)
-                                       (apply map (true_branch l) r)
+                                       (apply map (true_branch l) r) 
                                        (apply map (false_branch l) r)
             end
           in
           MemoMap.put map.m (l, r) result;
           result
         end
-    end
 end
 
-(*
-module AndOp
-  use int.Int
-  use int.Abs
 
-  let predicate eq i j = abs (i - j) < 2
-  let function hash i = i
+module And
+  let function bool_op (a b : bool) : bool = a && b
+  clone export BinOp with val bool_op = bool_op
+end
 
-  clone CustomHashtbl with type key = int, val eq = eq, val hash = hash
-end*)
+
+module Or
+  let function bool_op (a b : bool) : bool = a || b
+  clone export BinOp with val bool_op = bool_op
+end
+
+
+module Implies
+  let function bool_op (a b : bool) : bool = not a || b 
+  clone export BinOp with val bool_op = bool_op
+end

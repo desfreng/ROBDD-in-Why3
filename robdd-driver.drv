@@ -6,7 +6,7 @@ module robdd.HashConsingHashtbl
   \n  open Robdd__BDDType \
   \n  type t = bdd \
   \n  let equal = eq1 \
-  \n  let hash = Hashtbl.hash \
+  \n  let hash = hash1 \
   \nend) \n"
 
   syntax type      t        "Robdd__HashConsingHashtbl.t"
@@ -17,19 +17,36 @@ module robdd.HashConsingHashtbl
   syntax val       mem      "Robdd__HashConsingHashtbl.mem %1 %2" prec 4 3 3
 end
 
-(*
-module robdd.CustomHashtbl
-  prelude export "module CustHashtbl = Hashtbl.Make(struct \
-  \n  type t = key\
-  \n  let equal = eq\
-  \n  let hash i = hash_func i |> Z.to_int\
+
+module robdd.BDDAssociationMap
+  prelude "include Hashtbl.Make(struct \
+  \n  open Robdd__BDDType \
+  \n  type t = bdd \
+  \n  let equal = eq0 \
+  \n  let hash = hash0 \
   \nend) \n"
 
-  syntax type      t        "CustHashtbl.t"
-  syntax val       create   "CustHashtbl.create %1" prec 4 3 3
-  syntax val       put      "CustHashtbl.add %1 %2 %3" prec 4 3 3
+  syntax type      t        "Robdd__BDDAssociationMap.t"
+  syntax val       create   "Robdd__BDDAssociationMap.create (Z.to_int %1)" prec 4 3 3
+  syntax val       put      "Robdd__BDDAssociationMap.replace %1 %2 %3" prec 4 3 3
   syntax exception NotFound "Not_found"
-  syntax val       find     "CustHashtbl.find %1 %2" prec 4 3 3
-  syntax val       mem      "CustHashtbl.mem %1 %2" prec 4 3 3
+  syntax val       find     "Robdd__BDDAssociationMap.find %1 %2" prec 4 3 3
+  syntax val       mem      "Robdd__BDDAssociationMap.mem %1 %2" prec 4 3 3
 end
-*)
+
+
+module robdd.BDDTupleAssociationMap
+  prelude "include Hashtbl.Make(struct \
+  \n  open Robdd__BDDType \
+  \n  type t = bdd * bdd \
+  \n  let equal = tuple_eq0 \
+  \n  let hash = tuple_hash0 \
+  \nend) \n"
+
+  syntax type      t        "Robdd__BDDTupleAssociationMap.t"
+  syntax val       create   "Robdd__BDDTupleAssociationMap.create (Z.to_int %1)" prec 4 3 3
+  syntax val       put      "Robdd__BDDTupleAssociationMap.replace %1 %2 %3" prec 4 3 3
+  syntax exception NotFound "Not_found"
+  syntax val       find     "Robdd__BDDTupleAssociationMap.find %1 %2" prec 4 3 3
+  syntax val       mem      "Robdd__BDDTupleAssociationMap.mem %1 %2" prec 4 3 3
+end
