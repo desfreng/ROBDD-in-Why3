@@ -1,0 +1,10 @@
+
+(executable
+  (name client)
+  (modules client)
+  (libraries robdd))
+
+(library
+  (public_name robdd)
+  (modules robdd__BDDType robdd__HashConsingHashtbl robdd__BDD)
+  (libraries zarith))

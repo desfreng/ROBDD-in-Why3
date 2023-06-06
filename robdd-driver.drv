@@ -1,28 +1,30 @@
 
 (** OCaml ROBDD driver *)
 
-module robdd.DefaultHashtbl
-  prelude export "module DefHashtbl = Hashtbl.Make(struct \
-  \n  type t = key\
-  \n  let equal = eq\
-  \n  let hash = Hashtbl.hash\
+module robdd.HashConsingHashtbl
+  prelude "include Hashtbl.Make(struct \
+  \n  open Robdd__BDDType \
+  \n  type t = bdd \
+  \n  let equal = eq1 \
+  \n  let hash = Hashtbl.hash \
   \nend) \n"
-  
-  syntax type      t        "DefHashtbl.t"
-  syntax val       create   "DefHashtbl.create %1" prec 4 3 3
-  syntax val       put      "DefHashtbl.add %1 %2 %3" prec 4 3 3
+
+  syntax type      t        "Robdd__HashConsingHashtbl.t"
+  syntax val       create   "Robdd__HashConsingHashtbl.create (Z.to_int %1)" prec 4 3 3
+  syntax val       put      "Robdd__HashConsingHashtbl.replace %1 %2 %3" prec 4 3 3
   syntax exception NotFound "Not_found"
-  syntax val       find     "DefHashtbl.find %1 %2" prec 4 3 3
-  syntax val       mem      "DefHashtbl.mem %1 %2" prec 4 3 3
+  syntax val       find     "Robdd__HashConsingHashtbl.find %1 %2" prec 4 3 3
+  syntax val       mem      "Robdd__HashConsingHashtbl.mem %1 %2" prec 4 3 3
 end
 
+(*
 module robdd.CustomHashtbl
   prelude export "module CustHashtbl = Hashtbl.Make(struct \
   \n  type t = key\
   \n  let equal = eq\
   \n  let hash i = hash_func i |> Z.to_int\
   \nend) \n"
-  
+
   syntax type      t        "CustHashtbl.t"
   syntax val       create   "CustHashtbl.create %1" prec 4 3 3
   syntax val       put      "CustHashtbl.add %1 %2 %3" prec 4 3 3
@@ -30,3 +32,4 @@ module robdd.CustomHashtbl
   syntax val       find     "CustHashtbl.find %1 %2" prec 4 3 3
   syntax val       mem      "CustHashtbl.mem %1 %2" prec 4 3 3
 end
+*)
