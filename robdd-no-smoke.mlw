@@ -262,13 +262,13 @@ module BDD
     ensures { well_formed hc.tbl result }
     
     (* If t <> f, var result = v *)
-    ensures { t <> f -> var result = v }
+    ensures { not t <> f \/ var result = v }
     
     (* If t = f and is_node t, var result = var t *)
-    ensures { t = f -> is_node t -> var t = var result }
+    ensures { not t = f \/ not is_node t \/ var t = var result }
     
     (* If result is a node, var result <= v *)
-    ensures { is_node result -> var result >= v }
+    ensures { not is_node result \/ var result >= v }
     
     (* Interpretation of a ROBDD *)
     ensures { forall a : affectation. value a result = if a v then value a t else value a f }
@@ -330,13 +330,13 @@ module Not
     ensures { well_formed map.hc.tbl result }
     
     (* If the input is a node, then it is in the table *)
-    ensures { is_node b -> MemoMap.is_in map.m b }
+    ensures { not is_node b \/ MemoMap.is_in map.m b }
 
     (* If the input is a node, then its associated value in the table is the result *)
-    ensures { is_node b -> MemoMap.val_of map.m b = result }
+    ensures { not is_node b \/ MemoMap.val_of map.m b = result }
     
     (* If the result is a node, then the input must be a node and var result is >= than var b *)
-    ensures { is_node result -> var b <= var result /\ is_node b }
+    ensures { not is_node result \/ var b <= var result /\ is_node b }
     
     (* All the old well-formed bdd in map.hc are still well-formed in map.hc *)
     ensures { still_well_formed (old map.hc) map.hc }
@@ -345,7 +345,7 @@ module Not
     ensures { forall u : bdd. MemoMap.is_in (old map).m u -> MemoMap.is_in map.m u /\ MemoMap.val_of (old map).m u = MemoMap.val_of map.m u }
     
     (* No changes have been made to the memo_table if the input is a leaf *)
-    ensures { is_leaf b -> forall u : bdd. MemoMap.is_in (old map).m u = MemoMap.is_in map.m u }
+    ensures { not is_leaf b \/ forall u : bdd. MemoMap.is_in (old map).m u = MemoMap.is_in map.m u }
         
     (* The result is the result of the not operation *)
     ensures { is_not_bdd result b }
@@ -403,12 +403,12 @@ module Size
     forall u v [@induction] : bdd. mem u (subnodes v) -> is_node (false_branch u) -> mem (false_branch u) (subnodes v)
 
   (* Compute the number of Nodes in a well-formed BDD *)
-  let size (ghost hc : hctable) (in_bdd : bdd) : (card: int) =
+  let size (ghost hc : hctable) (in_bdd : bdd) : int =
     (* in_bdd is well-formed *)
     requires { well_formed hc.tbl in_bdd }
     
     (* The result is the cardinal of the subnodes of in_bdd *)
-    ensures { card = cardinal (subnodes in_bdd) }
+    ensures { result = cardinal (subnodes in_bdd) }
 
     let m = HashMap.create 16 in
     let ghost ref s = empty in

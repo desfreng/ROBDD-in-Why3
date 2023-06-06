@@ -10,4 +10,7 @@ queens: all
 	cd extraction && dune exec ./queens.exe
 
 smoke: 
-	why3 
+	why3 replay --smoke-detector=top robdd-no-smoke
+
+replay:
+	why3 replay robdd
