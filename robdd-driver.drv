@@ -9,11 +9,11 @@ module robdd.HashConsingHashtbl
   \n  let hash u = \
   \n    match u with \
   \n      | Top | Bottom -> id u \
-  \n      | N (v, t, f, _) -> (Z.to_int v) + 8191 * (id t + 8191 * id f) \
+  \n      | N (v, t, f, _) -> v + 8191 * (id t + 8191 * id f) \
   \nend) \n"
 
   syntax type      t        "Robdd__HashConsingHashtbl.t"
-  syntax val       create   "Robdd__HashConsingHashtbl.create (Z.to_int %1)" prec 4 3 3
+  syntax val       create   "(fun _ -> Robdd__HashConsingHashtbl.create 16) %1" prec 4 3 3
   syntax val       put      "Robdd__HashConsingHashtbl.replace %1 %2 %3" prec 4 3 3
   syntax exception NotFound "Not_found"
   syntax val       find     "Robdd__HashConsingHashtbl.find %1 %2" prec 4 3 3
@@ -30,7 +30,7 @@ module robdd.BDDAssociationMap
   \nend) \n"
 
   syntax type      t        "Robdd__BDDAssociationMap.t"
-  syntax val       create   "Robdd__BDDAssociationMap.create (Z.to_int %1)" prec 4 3 3
+  syntax val       create   "(fun _ -> Robdd__BDDAssociationMap.create 16) %1" prec 4 3 3
   syntax val       put      "Robdd__BDDAssociationMap.replace %1 %2 %3" prec 4 3 3
   syntax exception NotFound "Not_found"
   syntax val       find     "Robdd__BDDAssociationMap.find %1 %2" prec 4 3 3
@@ -47,7 +47,7 @@ module robdd.BDDTupleAssociationMap
   \nend) \n"
 
   syntax type      t        "Robdd__BDDTupleAssociationMap.t"
-  syntax val       create   "Robdd__BDDTupleAssociationMap.create (Z.to_int %1)" prec 4 3 3
+  syntax val       create   "(fun _ -> Robdd__BDDTupleAssociationMap.create 16) %1" prec 4 3 3
   syntax val       put      "Robdd__BDDTupleAssociationMap.replace %1 %2 %3" prec 4 3 3
   syntax exception NotFound "Not_found"
   syntax val       find     "Robdd__BDDTupleAssociationMap.find %1 %2" prec 4 3 3

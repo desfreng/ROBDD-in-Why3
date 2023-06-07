@@ -1,6 +1,7 @@
 open Robdd.Robdd__BDDType
 open Robdd.Robdd__BDD
 open Robdd.Robdd__Size
+open Robdd.Robdd__SAT
 
 let hc = create_hctable ()
 let and_memo = Robdd.Robdd__And.init_memo_map hc
@@ -9,43 +10,29 @@ let implies_memo = Robdd.Robdd__Implies.init_memo_map hc
 let not_memo = Robdd.Robdd__Not.init_memo_map hc
 
 (* And operation  *)
-let ( && ) a b = Robdd.Robdd__And.apply and_memo a b
+let ( &&& ) a b = Robdd.Robdd__And.apply and_memo a b
 
 (* Not operation *)
 let ( ! ) a = Robdd.Robdd__Not.apply not_memo a
 
 (* Or operation *)
-let ( || ) a b = Robdd.Robdd__Or.apply or_memo a b
+let ( ||| ) a b = Robdd.Robdd__Or.apply or_memo a b
 
 (* Implication *)
 let ( --> ) a b = Robdd.Robdd__Implies.apply implies_memo a b
 
 (* forall i. lo <= i < hi -> f i *)
-let rec forall lo hi f = if lo >= hi then Top else f lo && forall (lo + 1) hi f
+let rec forall lo hi f = if lo >= hi then Top else f lo &&& forall (lo + 1) hi f
 
 (* forall i. lo <= i < hi -> f i *)
 let rec exists lo hi f =
-  if lo >= hi then Bottom else f lo || exists (lo + 1) hi f
+  if lo >= hi then Bottom else f lo ||| exists (lo + 1) hi f
 
-let any_sat n_var b =
-  let sol = Array.make (n_var * n_var) false in
-  let rec _loop = function
-    | Top | Bottom -> ()
-    | N (v, t, f, _) ->
-        if t != Bottom then (
-          sol.(Z.to_int v) <- true;
-          _loop t)
-        else _loop f
-  in
-  _loop b;
-  sol
-
-let is_sat b = b != Bottom
 let var_id_of_tuple n (i, j) = i + (n * j)
 
 (* Queen at (i, j) *)
 let v n i j =
-  let id = var_id_of_tuple n (i, j) |> Z.of_int in
+  let id = var_id_of_tuple n (i, j) in
   create_node hc id Top Bottom
 
 (* forall i. 0 <= i < n, exists j. 0 <= j < n, V i j *)
@@ -87,19 +74,19 @@ let no_queens_same_anti_diagonal n =
               if d != 0 then v n i j --> !(v n (i + d) (j - d)) else Top)))
 
 let queens n =
-  one_queen_per_line n (* && one_queen_per_column n *) && no_queens_same_line n
-  && no_queens_same_colunm n && no_queens_same_diagonal n
-  && no_queens_same_anti_diagonal n
+  one_queen_per_line n &&& no_queens_same_line n &&& no_queens_same_colunm n
+  &&& no_queens_same_diagonal n
+  &&& no_queens_same_anti_diagonal n
 
 let print_sol n s =
   let line_sep =
-    String.init ((2 * n) + 1) (fun i -> if i mod 2 = 0 then '+' else '-')
+    String.init ((4 * n) + 1) (fun i -> if i mod 4 = 0 then '+' else '-')
   in
   Format.printf "%s\n" line_sep;
   for i = 0 to n - 1 do
     for j = 0 to n - 1 do
-      if s.(var_id_of_tuple n (i, j)) then Format.printf "|x"
-      else Format.printf "| "
+      if s.(var_id_of_tuple n (i, j)) then Format.printf "| X "
+      else Format.printf "|   "
     done;
     Format.printf "|\n%s\n" line_sep
   done;
@@ -129,6 +116,5 @@ let () =
     let sol = any_sat (n * n) b in
     print_sol n sol)
   else Format.printf "The %i-Queens Problem have no solution@." n;
-  Format.printf "@.Number of distinct nodes of the BDD : %i@."
-    (size b |> Z.to_int);
+  Format.printf "@.Number of distinct nodes of the BDD : %i@." (size b);
   Format.printf "Time passed to build the BDD : %f s@." t

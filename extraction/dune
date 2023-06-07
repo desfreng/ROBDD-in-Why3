@@ -15,5 +15,6 @@
   robdd__Size
   robdd__And
   robdd__Or
-  robdd__Implies)
+  robdd__Implies
+  robdd__SAT)
  (libraries zarith))

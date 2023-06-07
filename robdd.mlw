@@ -1,14 +1,13 @@
 module BDDType
   use mach.peano.Peano
-  use int.Int
-  use int.EuclideanDivision
+  use mach.int.Int63
 
   type bdd =
     | Bottom
     | Top
-    | N int bdd bdd Peano.t (* N (var_id, true_branch, false_branch, node_id) *)
+    | N int63 bdd bdd Peano.t (* N (var_id, true_branch, false_branch, node_id) *)
 
-  type affectation = int -> bool
+  type affectation = int63 -> bool
 
 
   (** Test whenever provided bdd has a node as root *)
@@ -38,7 +37,7 @@ module BDDType
     end
 
   (** Return the id of variable of provided bdd *)
-  let function var (input : bdd) : int =
+  let function var (input : bdd) : int63 =
     requires { is_node input }
     match input with
       | N var_id _ _ _ -> var_id
@@ -111,7 +110,7 @@ module Hashtbl
 
   function val_of (h : t 'a) (k : key) : 'a = Map.([]) h.contents k
 
-  val create (_n: int) : t 'a
+  val create (_u : unit) : t 'a
    ensures { forall k : key. is_in result k = false }
 
   val put (h: t 'a) (k: key) (v: 'a) : unit
@@ -150,7 +149,9 @@ end
 module BDD
   use int.Int
   use mach.peano.Peano
+  use mach.int.Int63
   use export BDDType
+
   use HashConsingHashtbl as HCMap
 
   (* A value is mem_tbl in the table if it is in the table and it is linked to itself *)
@@ -196,12 +197,12 @@ module BDD
   (* Each BDD mem_tbl in table have an id greater than 2 *)
   invariant { forall u : bdd. mem_tbl tbl u -> id u >= 2 }
 
-  by { tbl = HCMap.create 16 ; next_id = Peano.succ Peano.one }
+  by { tbl = HCMap.create (); next_id = Peano.succ Peano.one }
 
   (* Each BDD is now uniquily present in the table *)
   lemma bdd_is_unique :
     forall hc : hctable, u v : bdd. mem_tbl hc.tbl u /\ mem_tbl hc.tbl v ->
-        var u = var v /\ true_branch u = true_branch v /\ false_branch u = false_branch v ->
+        var u = var v -> true_branch u = true_branch v -> false_branch u = false_branch v ->
           u = v
 
   (* All BDD well-formed in the 'old_hc' Hash-consign table are still well-formed in the newer one *)
@@ -217,10 +218,10 @@ module BDD
     forall hc : hctable, u v : bdd. well_formed hc.tbl u -> well_formed hc.tbl v -> u = v <-> eq0 u v
 
   (* Create an empty hctable *)
-  let create_hctable () : hctable = { tbl = HCMap.create 16 ; next_id = Peano.succ Peano.one }
+  let create_hctable () : hctable = { tbl = HCMap.create () ; next_id = Peano.succ Peano.one }
 
   (* From two bdd and a variable, we create a new BDD in the table *)
-  let create_node (hc : hctable) (v : int) (t : bdd) (f : bdd) : bdd =
+  let create_node (hc : hctable) (v : int63) (t : bdd) (f : bdd) : bdd =
     (* If t is a node, var t > v *)
     requires { is_node t -> var t > v }
 
@@ -299,9 +300,9 @@ module Not
   (* The variable of the keys are <= than the variable of the value (if the value is a node) *)
   invariant { forall u : bdd. mem_tbl hc.tbl u -> MemoMap.is_in m u -> is_node (MemoMap.val_of m u) -> var u <= var (MemoMap.val_of m u) }
 
-  by { hc = create_hctable (); m = MemoMap.create 16 }
+  by { hc = create_hctable (); m = MemoMap.create () }
 
-  let init_memo_map (hc : hctable) : memoMap = { hc = hc ; m = MemoMap.create 16 }
+  let init_memo_map (hc : hctable) : memoMap = { hc = hc ; m = MemoMap.create () }
 
   (** Memoised unary operation *)
   let rec apply (map : memoMap) (b : bdd) : bdd =
@@ -357,6 +358,7 @@ end
 module Size
   use BDD
   use int.Int
+  use mach.peano.Peano
   use set.Fset
   use ref.Ref
   use BDDAssociationMap as HashMap
@@ -384,17 +386,30 @@ module Size
   lemma sub_nodes_with_false_branch:
     forall u v [@induction] : bdd. mem u (subnodes v) -> is_node (false_branch u) -> mem (false_branch u) (subnodes v)
 
+  (* u is in its subnodes *)
+  lemma bdd_in_their_subnodes:
+    forall u : bdd. is_node u -> mem u (subnodes u)
+
+  (* Top and Bottom are not in the subnodes of any bdd *)
+  let rec lemma top_bottom_not_in_subnodes (b : bdd) =
+    ensures { not mem Top (subnodes b) }
+    ensures { not mem Bottom (subnodes b) }
+    match b with
+      | Top | Bottom -> ()
+      | N _ t f _ -> top_bottom_not_in_subnodes t; top_bottom_not_in_subnodes f
+    end
+
   (* Compute the number of Nodes in a well-formed BDD *)
-  let size (ghost hc : hctable) (in_bdd : bdd) : int =
+  let size (ghost hc : hctable) (in_bdd : bdd) : Peano.t =
     (* in_bdd is well-formed *)
     requires { well_formed hc.tbl in_bdd }
 
     (* The result is the cardinal of the subnodes of in_bdd *)
     ensures { result = cardinal (subnodes in_bdd) }
 
-    let m = HashMap.create 16 in
+    let m = HashMap.create () in
     let ghost ref s = empty in
-    let ref cpt = 0 in
+    let ref cpt = Peano.zero in
 
     let rec loop (b : bdd) =
       (* b is a well-formed bdd *)
@@ -429,7 +444,7 @@ module Size
 
       variant { b }
       if not HashMap.mem m b then (
-        cpt <- cpt + 1;
+        cpt <- Peano.succ cpt;
         HashMap.put m b ();
         s <- Fset.add b s
       );
@@ -448,6 +463,7 @@ end
 module BinOp
   use BDD
   use int.Int
+  use mach.int.Int63
   use int.MinMax
   use BDDTupleAssociationMap as MemoMap
 
@@ -488,9 +504,9 @@ module BinOp
   (* The bdd in the keys have their id < than the next id of the hash-consign table *)
   invariant { forall u v : bdd. MemoMap.is_in m (u, v) -> id u < hc.next_id /\ id v < hc.next_id }
 
-  by { hc = create_hctable (); m = MemoMap.create 16 }
+  by { hc = create_hctable (); m = MemoMap.create () }
 
-  let init_memo_map (hc : hctable) : memoMap = { hc = hc ; m = MemoMap.create 16 }
+  let init_memo_map (hc : hctable) : memoMap = { hc = hc ; m = MemoMap.create () }
 
   (** Memoised binary operation *)
   let rec apply (map : memoMap) (l r : bdd) : bdd =

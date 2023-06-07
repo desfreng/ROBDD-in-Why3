@@ -1,4 +1,4 @@
-MODNAMES=BDDType HashConsingHashtbl BDDAssociationMap BDDTupleAssociationMap BDD Not Size And Or Implies
+MODNAMES=BDDType HashConsingHashtbl BDDAssociationMap BDDTupleAssociationMap BDD Not Size And Or Implies SAT
 MODS=$(addprefix robdd., $(MODNAMES))
 
 all: robdd.mlw
@@ -9,7 +9,7 @@ queens: all
 	cd extraction && dune exec ./queens.exe
 
 smoke:
-	why3 replay --smoke-detector=top robdd-no-smoke
+	why3 -L . replay --smoke-detector=top robdd-no-smoke
 
 replay:
-	why3 replay robdd
+	why3 -L . replay robdd
