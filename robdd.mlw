@@ -389,6 +389,10 @@ module Size
   (* u is in its subnodes *)
   lemma bdd_in_their_subnodes:
     forall u : bdd. is_node u -> mem u (subnodes u)
+    
+  (* All the variable of b are in [0; n [ *)
+  predicate var_bounded_bdd (n : int) (b : bdd) =
+    forall u : bdd. mem u (subnodes b) -> n > var u >= 0
 
   (* Top and Bottom are not in the subnodes of any bdd *)
   let rec lemma top_bottom_not_in_subnodes (b : bdd) =
