@@ -389,7 +389,7 @@ module Size
   (* u is in its subnodes *)
   lemma bdd_in_their_subnodes:
     forall u : bdd. is_node u -> mem u (subnodes u)
-    
+
   (* All the variable of b are in [0; n [ *)
   predicate var_bounded_bdd (n : int) (b : bdd) =
     forall u : bdd. mem u (subnodes b) -> n > var u >= 0
@@ -614,4 +614,267 @@ end
 module Implies
   let function bool_op (a b : bool) : bool = not a || b
   clone export BinOp with val bool_op = bool_op
+end
+
+module Sat
+  use BDD
+  use Size
+  use seq.Seq
+  use set.Fset
+  use mach.int.Int63
+  use int.Int
+
+  let rec lemma value_match (hc : hctable) (u v : affectation) (b : bdd) =
+    requires { well_formed hc.tbl b }
+    requires { is_node b -> forall y : int63. y >= var b -> u y  = v y }
+    ensures { value u b = value v b }
+    variant  { b }
+    if is_leaf b then ()
+    else
+      if u (var b) then
+        value_match hc u v (true_branch b)
+      else
+        value_match hc u v (false_branch b)
+
+  predicate sat (b : bdd) =
+    exists f : affectation. value f b = True
+
+  lemma top_is_sat:
+    sat Top
+    by value (fun _ -> False) Top = True
+
+  let rec lemma nodes_are_sat (hc : hctable) (b : bdd) : affectation =
+    requires { mem_tbl hc.tbl b }
+    ensures {
+    value result b = True }
+    variant { b }
+    match b with
+      | N v Bottom f _ ->
+          match f with
+            | Top -> (fun _ -> False)
+            | Bottom -> absurd
+            | N _ _ _ _ ->  let u = nodes_are_sat hc f in (fun x -> if x = v then False else u x)
+          end
+      | N v t _ _ ->
+          match t with
+            | Top -> (fun _ -> True)
+            | Bottom -> absurd
+            | N _ _ _ _ -> let u = nodes_are_sat hc t in (fun x -> if x = v then True else u x)
+          end
+      | _ -> absurd
+    end
+
+  let predicate is_sat (ghost hc : hctable) (b : bdd) =
+    requires { well_formed hc.tbl b }
+    ensures { result <-> sat b }
+    match b with
+      | Bottom -> False
+      | Top | N _ _ _ _ -> True
+    end
+end
+
+module AnySat
+  use BDD
+  use Size
+  use Sat
+  use mach.int.Int63
+  use int.Int
+  use seq.Seq
+  use set.Fset
+  use mach.array.Array63
+
+
+  (* Predicate to get the value of a BDD with an array *)
+  let rec ghost predicate array_value (sol : array bool) (b : bdd) =
+    requires { var_bounded_bdd sol.length b }
+    variant { b }
+    match b with
+      | Top -> True
+      | Bottom -> False
+      | N v t f _ -> if sol[v] then array_value sol t else array_value sol f
+    end
+
+  let rec lemma array_value_same_eval (b : bdd) (sol : array bool) (affect : affectation) =
+    requires { var_bounded_bdd sol.length b }
+    requires { forall x : int63. 0 <= x < sol.length -> sol[x] = affect x }
+    ensures { array_value sol b <-> value affect b }
+    variant { b }
+    match b with
+      | Top | Bottom -> ()
+      | N v t f _ -> if sol[v] then array_value_same_eval t sol affect else array_value_same_eval f sol affect
+    end
+
+  (* Give an affectation for each var in [0; n[ that satisfy the bdd. *)
+  let any_sat (ghost hc : hctable) (n : int63) (b : bdd) : array bool =
+    (* Well-formed bdd *)
+    requires { well_formed hc.tbl b }
+
+    (* All the variable are in [0; n [ *)
+    requires { var_bounded_bdd n b }
+
+    (* n >=0 *)
+    requires { n >= 0 }
+
+    (* If b is sat, the result is an affectation that satisfy the bdd *)
+    ensures { sat b -> array_value result b = True }
+
+    let sol = Array63.make n False in
+    let rec _loop (u : bdd) =
+      (* Well-formed BDD *)
+      requires { well_formed hc.tbl u }
+
+      (* All the variable are in [0; n [ *)
+      requires { var_bounded_bdd n u }
+
+      (* u is a subnodes of b or u is Top *)
+      requires { u = Top \/ mem u (subnodes b) }
+
+      (* All the cell between (var u) and n are set to False
+         (No modification of the array is this range has been made) *)
+      requires { forall x : int. is_node u -> n > x >= var u -> sol[x] = False }
+
+      (* This build a correct affectation that satisfy u *)
+      ensures { array_value sol u }
+
+      (* If u is a node, all the modification before our variable are kept *)
+      ensures { forall x : int63. is_node u -> 0 <= x < var u -> (old sol)[x] = sol[x] }
+
+      (* We do not modify the array if u = Top *)
+      ensures { u = Top -> old sol = sol }
+
+      variant { u }
+      match u with
+        | Top -> ()
+        | Bottom -> absurd
+        | N v t Bottom _ -> sol[v] <- True; _loop t
+        | N _ _ f _ -> _loop f
+      end
+    in
+    if is_node b then _loop b;
+    sol
+end
+
+
+module CountSat
+  use BDD
+  use Size
+  use mach.int.Int63
+  use set.Fset
+  use seq.Seq
+  use int.Int
+  use int.Power
+
+  (* Predicate to get the value of a BDD with a sequence *)
+  let rec ghost predicate seq_value (sol : seq bool) (b : bdd) =
+    requires { var_bounded_bdd sol.length b }
+    variant { b }
+    match b with
+      | Top -> True
+      | Bottom -> False
+      | N v t f _ -> if sol[Int63.to_int v] then seq_value sol t else seq_value sol f
+    end
+
+
+  (* seq_value and value give the same output for similar affectation *)
+  let rec lemma array_value_same_eval (b : bdd) (sol : seq bool) (affect : affectation) =
+    requires { var_bounded_bdd sol.length b }
+    requires { forall x : int63. 0 <= x < sol.length -> sol[x] = affect x }
+    ensures { seq_value sol b <-> value affect b }
+    variant { b }
+    match b with
+      | Top | Bottom -> ()
+      | N v t f _ -> if sol[Int63.to_int v] then array_value_same_eval t sol affect else array_value_same_eval f sol affect
+    end
+
+  (* build all the interpretation satifying a BDD *)
+  let rec function all_sat (ghost hc : hctable) (nb_var : int63) (v_id : int63) (ghost a : seq bool) (b : bdd) : (card : int, ghost set : fset (seq bool)) =
+    (* v_id is in [0; nb_var] *)
+    requires { nb_var >= v_id >= 0 }
+
+    (* All variable are < than nb_var *)
+    requires { var_bounded_bdd nb_var b }
+
+    (* b is well-formed *)
+    requires { well_formed hc.tbl b }
+
+    (* If b is a node, var b >= v_id *)
+    requires { is_node b -> v_id <= var b }
+
+    (* a is of length max_var *)
+    requires { a.length = nb_var }
+
+    (* The size of all the sequences in the result is max_var - v_id *)
+    ensures { forall u : seq bool. mem u set -> u.length = nb_var }
+
+    (* All sequences in the result satisfies b *)
+    ensures { forall u : seq bool. mem u set -> seq_value u b = True }
+
+    (* All sequences have the same begining as a *)
+    ensures { forall u : seq bool. mem u set -> forall i : int. 0 <= i < v_id -> a[i] = u[i] }
+
+    (* If u is a sequences satifying b then u is in result *)
+    ensures { forall u : seq bool. u.length = nb_var -> seq_value u b = True -> (forall i : int. 0 <= i < v_id -> a[i] = u[i]) -> mem u set }
+
+    (* card is tha cardinal of the set built *)
+    ensures { card = cardinal set }
+
+    (* If b is Bottom, no affectation can satisfy it *)
+    ensures { b = Bottom -> set = Fset.empty /\ card = 0 }
+
+    (* If b is top, there is 2^(nb_var - v_id) affectation satisfying it (which begining is False) *)
+    ensures { b = Top -> card = power 2 (nb_var - v_id) }
+
+
+    variant { nb_var - v_id }
+    match b with
+      | Bottom -> let ghost res = Fset.empty in 0, res
+      | Top ->
+          if nb_var = v_id then
+            let ghost res = Fset.singleton a in
+            1, res
+          else
+            let b_true = set a (Int63.to_int v_id) True in
+            let b_false = set a (Int63.to_int v_id) False in
+            let true_card, true_set = all_sat hc nb_var (v_id + 1) b_true b in
+            let false_card, false_set = all_sat hc nb_var (v_id + 1) b_false b in
+            assert { Fset.disjoint true_set false_set };
+            assert { true_card = false_card };
+            let ghost res = Fset.union true_set false_set in
+            true_card + false_card, res
+      | N v t f _ ->
+          let b_true = set a (Int63.to_int v_id) True in
+          let b_false = set a (Int63.to_int v_id) False in
+          if v = v_id then
+            let true_card, true_set = all_sat hc nb_var (v_id + 1) b_true t in
+            let false_card, false_set = all_sat hc nb_var (v_id + 1) b_false f in
+            assert { Fset.disjoint true_set false_set };
+            let ghost res = Fset.union true_set false_set in
+            true_card + false_card, res
+          else
+            let true_card, true_set = all_sat hc nb_var (v_id + 1) b_true b in
+            let false_card, false_set = all_sat hc nb_var (v_id + 1) b_false b in
+            assert { Fset.disjoint true_set false_set };
+            let ghost res = Fset.union true_set false_set in
+            true_card + false_card, res
+    end
+
+
+  let function count_sat (ghost hc : hctable) (nb_var : int63) (b : bdd) : (card : int, ghost set : fset (seq bool)) =
+    (* v_id is in [0; nb_var] *)
+    requires { nb_var >= 0 }
+
+    (* All variable are < than nb_var *)
+    requires { var_bounded_bdd nb_var b }
+
+    (* b is well-formed *)
+    requires { well_formed hc.tbl b }
+
+    (* If u is a sequences satifying b then u is in result *)
+    ensures { forall u : seq bool. u.length = nb_var /\ seq_value u b = True <-> mem u set }
+
+    (* card is tha cardinal of the set built *)
+    ensures { card = cardinal set }
+
+    all_sat hc nb_var 0 (Seq.create (Int63.to_int nb_var) (fun _ -> False)) b
+
 end

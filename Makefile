@@ -1,4 +1,4 @@
-MODNAMES=BDDType HashConsingHashtbl BDDAssociationMap BDDTupleAssociationMap BDD Not Size And Or Implies SAT
+MODNAMES=BDDType HashConsingHashtbl BDDAssociationMap BDDTupleAssociationMap BDD Not Size And Or Implies Sat AnySat CountSat
 MODS=$(addprefix robdd., $(MODNAMES))
 
 all: robdd.mlw

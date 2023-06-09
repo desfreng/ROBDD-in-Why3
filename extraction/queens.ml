@@ -1,7 +1,9 @@
 open Robdd.Robdd__BDDType
 open Robdd.Robdd__BDD
 open Robdd.Robdd__Size
-open Robdd.Robdd__SAT
+open Robdd.Robdd__Sat
+open Robdd.Robdd__AnySat
+open Robdd.Robdd__CountSat
 
 let hc = create_hctable ()
 let and_memo = Robdd.Robdd__And.init_memo_map hc
@@ -92,18 +94,24 @@ let print_sol n s =
   done;
   Format.print_flush ()
 
-let string_of_bdd a =
-  match a with Top -> "Top" | Bottom -> "Bottom" | N _ -> "Node"
+let rec string_of_bdd a =
+  match a with
+  | Top -> "Top"
+  | Bottom -> "Bottom"
+  | N (x, t, f, _) ->
+      Format.sprintf "Node(%i, %s, %s)" x (string_of_bdd t) (string_of_bdd f)
 
 let () =
   Format.printf "@.Small Tests : @.";
-  Format.printf "Queens 0 : %s [expected : Top]@." (queens 0 |> string_of_bdd);
-  Format.printf "Queens 2 : %s [expected : Bottom]@." (queens 2 |> string_of_bdd);
-  Format.printf "Queens 3 : %s [expected : Bottom]@.@."
-    (queens 3 |> string_of_bdd);
-  Format.printf "Is sat 1-Queens : %b [expected : true]@." (queens 1 |> is_sat);
-  Format.printf "Is sat 2-Queens : %b [expected : false]@." (queens 2 |> is_sat);
-  Format.printf "Is sat 4-Queens : %b [expected : true]@.@." (queens 4 |> is_sat)
+  for i = 0 to 7 do
+    let q = queens i in
+    Format.printf "Test on %i-Queens : @." i;
+    if i < 5 then Format.printf "BDD : %s@." (string_of_bdd q);
+    Format.printf "Is-Sat : %b@." (is_sat q);
+    Format.printf "Number of solution : %s@."
+      (count_sat (i * i) q |> Z.to_string);
+    Format.print_newline ()
+  done
 
 let () =
   Format.printf "Enter N : @?";
@@ -112,9 +120,11 @@ let () =
   let b = queens n in
   let t = Sys.time () -. t1 in
   if is_sat b then (
-    Format.printf "The %i-Queens Problem is satisfiable : @.@." n;
+    Format.printf "The %i-Queens Problem is satisfiable : @." n;
     let sol = any_sat (n * n) b in
-    print_sol n sol)
+    print_sol n sol;
+    Format.printf "Number of Solution : %s @."
+      (count_sat (n * n) b |> Z.to_string))
   else Format.printf "The %i-Queens Problem have no solution@." n;
   Format.printf "@.Number of distinct nodes of the BDD : %i@." (size b);
   Format.printf "Time passed to build the BDD : %f s@." t

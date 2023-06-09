@@ -16,5 +16,7 @@
   robdd__And
   robdd__Or
   robdd__Implies
-  robdd__SAT)
+  robdd__Sat
+  robdd__AnySat
+  robdd__CountSat)
  (libraries zarith))
